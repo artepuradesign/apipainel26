@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Shield, Crown, Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCardThemeStyles } from '@/components/pricing/CardThemeUtils';
-import { getDiscount } from '@/utils/planUtils';
 import CardDecorations from '@/components/pricing/CardDecorations';
 import { toast } from 'sonner';
 import { initializeNewAccount } from '@/utils/balanceUtils';
 import { useAuth } from '@/contexts/AuthContext';
+import { useUserSubscription } from '@/hooks/useUserSubscription';
 
 interface PlanDisplayCardProps {
   currentPlan: string;
@@ -19,6 +19,7 @@ const PlanDisplayCard: React.FC<PlanDisplayCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { discountPercentage, hasActiveSubscription } = useUserSubscription();
 
   const handleAddBalance = () => {
     navigate('/dashboard/adicionar-saldo');
@@ -132,7 +133,7 @@ const PlanDisplayCard: React.FC<PlanDisplayCardProps> = ({
 
   const planColor = getPlanColor(currentPlan);
   const planSuit = getPlanSuit(currentPlan);
-  const discount = getDiscount(currentPlan);
+  const discount = hasActiveSubscription ? (discountPercentage || 0) : 0;
   const themeStyles = getCardThemeStyles(planColor);
   const isPrePago = currentPlan === 'Pré-Pago';
   const isTone1 = planColor === 'tone1';

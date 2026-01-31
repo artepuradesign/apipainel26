@@ -105,9 +105,43 @@ export const subscriptionService = {
   // Obter informações do plano baseado no tipoplano do usuário
   async getPlanInfo(planName: string): Promise<PlanResponse> {
     console.log('🔍 [SUBSCRIPTION] Buscando informações do plano:', planName);
-    return subscriptionApiRequest<PlanInfo>(`/plans/by-name/${encodeURIComponent(planName)}`, {
-      method: 'GET'
-    });
+
+    // Observação: alguns endpoints retornam `data` como ARRAY de planos, mesmo quando filtrado por nome.
+    // Normalizamos aqui para sempre retornar um único PlanInfo (o plano correspondente ao `planName`).
+    const response = await subscriptionApiRequest<any>(
+      `/plans/by-name/${encodeURIComponent(planName)}`,
+      { method: 'GET' }
+    );
+
+    if (!response.success) {
+      return response as PlanResponse;
+    }
+
+    const rawData = (response as any).data;
+    let plan: any | undefined;
+
+    if (Array.isArray(rawData)) {
+      const target = planName.trim().toLowerCase();
+      plan = rawData.find((p: any) => {
+        const name = (p?.name || '').toString().trim().toLowerCase();
+        const slug = (p?.slug || '').toString().trim().toLowerCase();
+        return name === target || slug === target;
+      });
+    } else {
+      plan = rawData;
+    }
+
+    if (!plan) {
+      return {
+        success: false,
+        error: 'Plano não encontrado'
+      };
+    }
+
+    return {
+      success: true,
+      data: plan as PlanInfo
+    };
   },
 
   // Criar nova assinatura (atualiza tanto user_subscriptions quanto users)

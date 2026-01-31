@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Users, Zap, Wallet, Monitor, Layout } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getDiscount } from '@/utils/planUtils';
 import { useApiPanels } from '@/hooks/useApiPanels';
 import { useApiModules } from '@/hooks/useApiModules';
 import { useUserSubscription } from '@/hooks/useUserSubscription';
@@ -109,7 +108,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
               <span className="text-sm text-gray-600 dark:text-gray-400">Desconto Ativo</span>
             </div>
             <span className="font-semibold text-green-600">
-              {subscriptionLoading ? '...' : `${discountPercentage || getDiscount(apiCurrentPlan) || 0}%`}
+              {subscriptionLoading ? '...' : `${discountPercentage || 0}%`}
             </span>
           </div>
           <div className="flex justify-between items-center">
