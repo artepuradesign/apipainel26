@@ -49,6 +49,19 @@ import ConsultarCpfCertidao from '@/pages/dashboard/ConsultarCpfCertidao';
 import ConsultarCpfTelefones from '@/pages/dashboard/ConsultarCpfTelefones';
 import ConsultarCpfEnderecos from '@/pages/dashboard/ConsultarCpfEnderecos';
 import ConsultarCpfEmails from '@/pages/dashboard/ConsultarCpfEmails';
+import ConsultarCpfCns from '@/pages/dashboard/ConsultarCpfCns';
+import ConsultarCpfTitulo from '@/pages/dashboard/ConsultarCpfTitulo';
+import ConsultarCpfPis from '@/pages/dashboard/ConsultarCpfPis';
+import ConsultarCpfScore from '@/pages/dashboard/ConsultarCpfScore';
+import ConsultarCpfCovid from '@/pages/dashboard/ConsultarCpfCovid';
+import ConsultarCpfEmpresasSocio from '@/pages/dashboard/ConsultarCpfEmpresasSocio';
+import ConsultarCpfMei from '@/pages/dashboard/ConsultarCpfMei';
+import ConsultarCpfDividasAtivas from '@/pages/dashboard/ConsultarCpfDividasAtivas';
+import ConsultarCpfAuxilioEmergencia from '@/pages/dashboard/ConsultarCpfAuxilioEmergencia';
+import ConsultarCpfRais from '@/pages/dashboard/ConsultarCpfRais';
+import ConsultarCpfInss from '@/pages/dashboard/ConsultarCpfInss';
+import ConsultarCpfSenhasEmail from '@/pages/dashboard/ConsultarCpfSenhasEmail';
+import ConsultarCpfSenhasCpf from '@/pages/dashboard/ConsultarCpfSenhasCpf';
 import ConsultarCNPJ from '@/pages/dashboard/ConsultarCNPJ';
 import ConsultarVeiculo from '@/pages/dashboard/ConsultarVeiculo';
 import BuscaNome from '@/pages/dashboard/BuscaNome';
@@ -185,6 +198,20 @@ function App() {
                     <Route path="/dashboard/consultar-cpf-telefones" element={<DashboardLayout><ConsultarCpfTelefones /></DashboardLayout>} />
                     <Route path="/dashboard/consultar-cpf-enderecos" element={<DashboardLayout><ConsultarCpfEnderecos /></DashboardLayout>} />
                     <Route path="/dashboard/consultar-cpf-emails" element={<DashboardLayout><ConsultarCpfEmails /></DashboardLayout>} />
+
+                    <Route path="/dashboard/consultar-cpf-cns" element={<DashboardLayout><ConsultarCpfCns /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-titulo" element={<DashboardLayout><ConsultarCpfTitulo /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-pis" element={<DashboardLayout><ConsultarCpfPis /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-score" element={<DashboardLayout><ConsultarCpfScore /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-covid" element={<DashboardLayout><ConsultarCpfCovid /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-empresas-socio" element={<DashboardLayout><ConsultarCpfEmpresasSocio /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-mei" element={<DashboardLayout><ConsultarCpfMei /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-dividas-ativas" element={<DashboardLayout><ConsultarCpfDividasAtivas /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-auxilio-emergencia" element={<DashboardLayout><ConsultarCpfAuxilioEmergencia /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-rais" element={<DashboardLayout><ConsultarCpfRais /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-inss" element={<DashboardLayout><ConsultarCpfInss /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-senhasemail" element={<DashboardLayout><ConsultarCpfSenhasEmail /></DashboardLayout>} />
+                    <Route path="/dashboard/consultar-cpf-senhascpf" element={<DashboardLayout><ConsultarCpfSenhasCpf /></DashboardLayout>} />
                     <Route path="/dashboard/consultar-cnpj" element={<DashboardLayout><ConsultarCNPJ /></DashboardLayout>} />
                     <Route path="/dashboard/consultar-veiculo" element={<DashboardLayout><ConsultarVeiculo /></DashboardLayout>} />
                     <Route path="/dashboard/busca-nome" element={<DashboardLayout><BuscaNome /></DashboardLayout>} />

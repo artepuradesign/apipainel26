@@ -595,16 +595,45 @@ export interface ConsultarCpfPuxaTudoProps {
   source?: string;
   /** Fallback para o util moduleData quando a API de módulos falhar */
   fallbackPricePath?: string;
+
+  /**
+   * Quando definido, a página deve exibir SOMENTE a seção alvo (modo página específica).
+   * Mantém o layout do Puxa Tudo, mas filtra a renderização do resultado.
+   */
+  onlySection?:
+    | 'cns'
+    | 'titulo'
+    | 'pis'
+    | 'score'
+    | 'vacinas'
+    | 'empresas_socio'
+    | 'cnpj_mei'
+    | 'dividas_ativas'
+    | 'auxilio_emergencial'
+    | 'rais'
+    | 'inss'
+    | 'senhas_email'
+    | 'senhas_cpf';
+
+  /**
+   * Regra de cobrança para páginas específicas:
+   * cobrar sempre quando o usuário clicar em Consultar, exceto quando carregado do histórico.
+   */
+  chargeAlwaysExceptHistory?: boolean;
 }
 
 const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
   moduleId: moduleIdProp,
   source: sourceProp,
   fallbackPricePath,
+  onlySection,
+  chargeAlwaysExceptHistory,
 }) => {
   const moduleId = moduleIdProp ?? 83;
   const source = sourceProp ?? 'consultar-cpf-puxa-tudo';
   const fallbackModulePath = fallbackPricePath ?? '/dashboard/consultar-cpf-puxa-tudo';
+
+  const isExclusiveMode = !!onlySection;
 
   // Modos “enxutos” por rota/módulo
   const isParentesMode =
@@ -635,16 +664,33 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
     isRestrictToBasicAndEmails ||
     isRestrictToBasicAndEnderecos;
 
+  const isSlimMode = isRestrictedMode || isExclusiveMode;
+
   // Visibilidade das seções (Puxa Tudo = mostra tudo; modos enxutos = mostra apenas o essencial)
   // Observação: nos módulos enxutos (Parentes/Telefones/Emails/Endereços/Certidão), ocultamos "Dados Básicos".
-  const showDadosBasicosSection = !isRestrictedMode;
-  const showTelefonesSection = !isRestrictedMode || isRestrictToBasicAndTelefones;
-  const showEmailsSection = !isRestrictedMode || isRestrictToBasicAndEmails;
-  const showEnderecosSection = !isRestrictedMode || isRestrictToBasicAndEnderecos;
-  const showParentesSection = !isRestrictedMode || isRestrictToBasicAndParentes;
+  const showDadosBasicosSection = !isSlimMode;
+  const showTelefonesSection = !isSlimMode || isRestrictToBasicAndTelefones;
+  const showEmailsSection = !isSlimMode || isRestrictToBasicAndEmails;
+  const showEnderecosSection = !isSlimMode || isRestrictToBasicAndEnderecos;
+  const showParentesSection = !isSlimMode || isRestrictToBasicAndParentes;
+
+  const showTituloEleitorSection = !isExclusiveMode || onlySection === 'titulo';
+  const showCnsSection = !isExclusiveMode || onlySection === 'cns';
+  const showPisSection = !isExclusiveMode || onlySection === 'pis';
+  const showVacinasSection = !isExclusiveMode || onlySection === 'vacinas';
+  const showEmpresasSocioSection = !isExclusiveMode || onlySection === 'empresas_socio';
+  const showCnpjMeiSection = !isExclusiveMode || onlySection === 'cnpj_mei';
+  const showDividasAtivasSection = !isExclusiveMode || onlySection === 'dividas_ativas';
+  const showAuxilioEmergencialSection = !isExclusiveMode || onlySection === 'auxilio_emergencial';
+  const showRaisSection = !isExclusiveMode || onlySection === 'rais';
+  const showInssSection = !isExclusiveMode || onlySection === 'inss';
+  const showSenhasEmailSection = !isExclusiveMode || onlySection === 'senhas_email';
+  const showSenhasCpfSection = !isExclusiveMode || onlySection === 'senhas_cpf';
+  const showScoreCards = !isExclusiveMode || onlySection === 'score';
 
   // Nessas telas enxutas, não exibimos os badges de atalho no topo.
   const hideShortcutBadges =
+    isExclusiveMode ||
     isRestrictToBasicAndParentes ||
     isRestrictToBasicAndCertidao ||
     isRestrictToBasicAndTelefones ||
@@ -652,12 +698,16 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
     isRestrictToBasicAndEnderecos;
 
   // Nestes módulos, a consulta só deve ser cobrada se a seção principal vier com dados.
-  const isConditionalChargeMode =
+  const isConditionalChargeModeRaw =
     isRestrictToBasicAndParentes ||
     isRestrictToBasicAndCertidao ||
     isRestrictToBasicAndTelefones ||
     isRestrictToBasicAndEmails ||
     isRestrictToBasicAndEnderecos;
+
+  // Para páginas específicas: sempre cobrar na busca manual (exceto histórico), então NÃO usar cobrança condicional.
+  const isConditionalChargeMode =
+    !!chargeAlwaysExceptHistory ? false : isConditionalChargeModeRaw;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -2752,14 +2802,17 @@ Todos os direitos reservados.`;
             )}
           </Card>
 
-          {!isRestrictedMode && (
+          {((!isSlimMode) || (isExclusiveMode && showScoreCards)) && (
             <>
               {/* Fotos - Usando FotosSection para consistência */}
-              <div id="fotos-section">
-                <FotosSection cpfId={result.id} cpfNumber={result.cpf} onCountChange={setFotosCount} />
-              </div>
+              {!isSlimMode && (
+                <div id="fotos-section">
+                  <FotosSection cpfId={result.id} cpfNumber={result.cpf} onCountChange={setFotosCount} />
+                </div>
+              )}
 
               {/* Score + CSB8 + CSBA (responsivo e compacto) */}
+              {showScoreCards && (
               <section className="mx-auto w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
                 <Card id="score-section" className={onlineCardClass(hasValue(result.score))}>
                   <CardContent className="p-2 space-y-1">
@@ -2906,7 +2959,10 @@ Todos os direitos reservados.`;
                 </Card>
               </section>
 
+              )}
+
               {/* Dados Financeiros */}
+              {!isSlimMode && (
               <Card id="dados-financeiros-section" className={onlineCardClass(hasDadosFinanceiros)}>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -2984,6 +3040,8 @@ Todos os direitos reservados.`;
               </div>
             </CardContent>
               </Card>
+
+              )}
             </>
           )}
 
@@ -3233,9 +3291,7 @@ Todos os direitos reservados.`;
             </div>
           )}
 
-          {!isRestrictedMode && (
-            <>
-              {/* Título de Eleitor */}
+          {(!isSlimMode || isExclusiveMode) && showTituloEleitorSection && (
               <Card id="titulo-eleitor-section" className={onlineCardClass(hasTituloEleitor)}>
             <CardHeader className="p-4 md:p-6">
               <div className="flex items-center justify-between gap-3">
@@ -3310,7 +3366,6 @@ Todos os direitos reservados.`;
               </div>
             </CardContent>
               </Card>
-            </>
           )}
 
           {/* Parentes */}
@@ -3321,100 +3376,122 @@ Todos os direitos reservados.`;
           )}
 
           {/* Certidão de Nascimento */}
-          {(isRestrictToBasicAndCertidao || !isRestrictedMode) && (
+          {(isRestrictToBasicAndCertidao || !isSlimMode) && (
             <div id="certidao-nascimento-section">
               <CertidaoNascimentoSection cpfId={result.id} onCountChange={setCertidaoNascimentoCount} />
             </div>
           )}
 
-          {!isRestrictedMode && (
+          {/* Documento (somente no Puxa Tudo) */}
+          {!isSlimMode && (
+            <div id="documento-section">
+              <DocumentoSection cpfId={result.id} onCountChange={setDocumentoCount} />
+            </div>
+          )}
+
+          {/* CNS */}
+          {(!isSlimMode || isExclusiveMode) && showCnsSection && (
+            <div id="cns-section">
+              <CnsSection cpfId={result.id} onCountChange={setCnsCount} />
+            </div>
+          )}
+
+          {/* PIS */}
+          {(!isSlimMode || isExclusiveMode) && showPisSection && (
+            <div id="pis-section">
+              <PisSection pis={result.pis} />
+            </div>
+          )}
+
+          {/* Vacinas */}
+          {(!isSlimMode || isExclusiveMode) && showVacinasSection && (
+            <div id="vacinas-section">
+              <VacinaDisplay cpfId={result.id} onCountChange={setVacinasCount} />
+            </div>
+          )}
+
+          {/* Empresas Associadas (SÓCIO) */}
+          {(!isSlimMode || isExclusiveMode) && showEmpresasSocioSection && (
+            <div id="empresas-socio-section">
+              <EmpresasSocioSection cpfId={result.id} onCountChange={setEmpresasSocioCount} />
+            </div>
+          )}
+
+          {/* CNPJ MEI */}
+          {(!isSlimMode || isExclusiveMode) && showCnpjMeiSection && (
+            <div id="cnpj-mei-section">
+              <CnpjMeiSection cpfId={result.id} onCountChange={setCnpjMeiCount} />
+            </div>
+          )}
+
+          {/* Dívidas Ativas (SIDA) */}
+          {(!isSlimMode || isExclusiveMode) && showDividasAtivasSection && (
+            <div id="dividas-ativas-section">
+              <DividasAtivasSection cpf={result.id.toString()} onCountChange={setDividasAtivasCount} />
+            </div>
+          )}
+
+          {/* Auxílio Emergencial */}
+          {(!isSlimMode || isExclusiveMode) && showAuxilioEmergencialSection && (
+            <div id="auxilio-emergencial-section">
+              <AuxilioEmergencialSection auxilios={auxiliosEmergenciais} />
+            </div>
+          )}
+
+          {/* Rais - Histórico de Emprego */}
+          {(!isSlimMode || isExclusiveMode) && showRaisSection && (
+            <div id="rais-section">
+              <RaisSection data={rais} isLoading={raisLoading} />
+            </div>
+          )}
+
+          {/* INSS */}
+          {(!isSlimMode || isExclusiveMode) && showInssSection && (
+            <div id="inss-section">
+              <InssSection cpfId={result.id} onCountChange={setInssCount} />
+            </div>
+          )}
+
+          {/* Operadoras (somente no Puxa Tudo) */}
+          {!isSlimMode && (
             <>
-
-              {/* Documento */}
-              <div id="documento-section">
-                <DocumentoSection cpfId={result.id} onCountChange={setDocumentoCount} />
-              </div>
-
-              {/* CNS */}
-              <div id="cns-section">
-                <CnsSection cpfId={result.id} onCountChange={setCnsCount} />
-              </div>
-
-              {/* PIS */}
-              <div id="pis-section">
-                <PisSection pis={result.pis} />
-              </div>
-
-              {/* Covid */}
-              <div id="vacinas-section">
-                <VacinaDisplay cpfId={result.id} onCountChange={setVacinasCount} />
-              </div>
-
-              {/* Empresas Associadas (SÓCIO) */}
-              <div id="empresas-socio-section">
-                <EmpresasSocioSection cpfId={result.id} onCountChange={setEmpresasSocioCount} />
-              </div>
-
-              {/* CNPJ MEI */}
-              <div id="cnpj-mei-section">
-                <CnpjMeiSection cpfId={result.id} onCountChange={setCnpjMeiCount} />
-              </div>
-
-              {/* Dívidas Ativas (SIDA) */}
-              <div id="dividas-ativas-section">
-                <DividasAtivasSection cpf={result.id.toString()} onCountChange={setDividasAtivasCount} />
-              </div>
-
-              {/* Auxílio Emergencial */}
-              <div id="auxilio-emergencial-section">
-                <AuxilioEmergencialSection auxilios={auxiliosEmergenciais} />
-              </div>
-
-              {/* Rais - Histórico de Emprego */}
-              <div id="rais-section">
-                <RaisSection data={rais} isLoading={raisLoading} />
-              </div>
-
-              {/* INSS */}
-              <div id="inss-section">
-                <InssSection cpfId={result.id} onCountChange={setInssCount} />
-              </div>
-
-              {/* Operadora Claro */}
               <div id="claro-section">
                 <ClaroSection cpfId={result.id} onCountChange={setClaroCount} />
               </div>
 
-              {/* Operadora Vivo */}
               <div id="vivo-section">
                 <VivoSection cpfId={result.id} onCountChange={setVivoCount} />
               </div>
 
-              {/* Operadora Tim */}
               <div id="tim-section">
                 <OperadoraTimSection cpfId={result.id} onCountChange={setTimCount} />
               </div>
 
-              {/* Operadora OI */}
               <div id="oi-section">
                 <OperadoraOiSection cpfId={result.id} onCountChange={setOiCount} />
               </div>
-
-              {/* Senhas de Email */}
-              <div id="senhas-email-section">
-                <SenhaEmailSection cpfId={result.id} onCountChange={setSenhaEmailCount} />
-              </div>
-
-              {/* Senhas do CPF */}
-              <div id="senhas-cpf-section">
-                <SenhaCpfSection cpfId={result.id} onCountChange={setSenhaCpfCount} />
-              </div>
-
-              {/* Gestão Cadastral */}
-              <div id="gestao-cadastral-section">
-                <GestaoSection cpfId={result.id} onCountChange={setGestaoCount} />
-              </div>
             </>
+          )}
+
+          {/* Senhas de Email */}
+          {(!isSlimMode || isExclusiveMode) && showSenhasEmailSection && (
+            <div id="senhas-email-section">
+              <SenhaEmailSection cpfId={result.id} onCountChange={setSenhaEmailCount} />
+            </div>
+          )}
+
+          {/* Senhas do CPF */}
+          {(!isSlimMode || isExclusiveMode) && showSenhasCpfSection && (
+            <div id="senhas-cpf-section">
+              <SenhaCpfSection cpfId={result.id} onCountChange={setSenhaCpfCount} />
+            </div>
+          )}
+
+          {/* Gestão Cadastral (somente no Puxa Tudo) */}
+          {!isSlimMode && (
+            <div id="gestao-cadastral-section">
+              <GestaoSection cpfId={result.id} onCountChange={setGestaoCount} />
+            </div>
           )}
 
 
