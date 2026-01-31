@@ -27,9 +27,25 @@ const RechargesSection: React.FC<RechargesSectionProps> = ({
   formatDate,
   loading = false
 }) => {
+  const getMethodShort = (method?: string) => {
+    switch ((method || '').toLowerCase()) {
+      case 'pix':
+        return 'PIX';
+      case 'boleto':
+        return 'Boleto';
+      case 'credit_card':
+        return 'Cartão';
+      case 'debit_card':
+        return 'Débito';
+      default:
+        return 'Recarga';
+    }
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 md:p-6">
-      <div className="space-y-3 md:space-y-4">
+    <div>
+      {/* Desktop */}
+      <div className="hidden md:block space-y-3 md:space-y-4">
         {rechargeTransactions.length > 0 ? (
           rechargeTransactions.map((transaction) => (
             <RechargeCard
@@ -40,7 +56,41 @@ const RechargesSection: React.FC<RechargesSectionProps> = ({
             />
           ))
         ) : (
-          <EmptyState 
+          <EmptyState
+            title="Nenhuma recarga encontrada"
+            subtitle="Suas recargas aparecerão aqui"
+            loading={loading}
+          />
+        )}
+      </div>
+
+      {/* Mobile compact */}
+      <div className="md:hidden">
+        {rechargeTransactions.length > 0 ? (
+          <div className="rounded-lg border border-border bg-card divide-y divide-border">
+            {rechargeTransactions.map((t) => (
+              <div key={t.id} className="px-3 py-2.5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium truncate">
+                        {t.description || 'Recarga'}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground flex-shrink-0">
+                        {getMethodShort(t.payment_method)}
+                      </span>
+                    </div>
+                    <div className="mt-0.5 text-[10px] text-muted-foreground">
+                      {formatDate(t.created_at)}
+                    </div>
+                  </div>
+                  <div className="text-xs font-semibold">{formatBrazilianCurrency(t.amount)}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
             title="Nenhuma recarga encontrada"
             subtitle="Suas recargas aparecerão aqui"
             loading={loading}

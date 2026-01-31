@@ -26,7 +26,8 @@ const CouponsSection: React.FC<CouponsSectionProps> = ({
 }) => {
   return (
     <div>
-      <div className="space-y-4">
+      {/* Desktop */}
+      <div className="hidden md:block space-y-4">
         {cupomHistory.length > 0 ? (
           cupomHistory.map((cupom) => (
             <div key={cupom.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
@@ -71,7 +72,41 @@ const CouponsSection: React.FC<CouponsSectionProps> = ({
             </div>
           ))
         ) : (
-          <EmptyState 
+          <EmptyState
+            title="Nenhum cupom utilizado"
+            subtitle="Seus cupons aplicados aparecerão aqui"
+            loading={loading}
+          />
+        )}
+      </div>
+
+      {/* Mobile compact */}
+      <div className="md:hidden">
+        {cupomHistory.length > 0 ? (
+          <div className="rounded-lg border border-border bg-card divide-y divide-border">
+            {cupomHistory.map((c) => (
+              <div key={c.id} className="px-3 py-2.5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium truncate">Cupom {c.codigo}</span>
+                      <span className="text-[10px] text-muted-foreground flex-shrink-0">
+                        {c.tipo === 'fixo' ? 'Fixo' : '%'}
+                      </span>
+                    </div>
+                    <div className="mt-0.5 text-[10px] text-muted-foreground truncate">
+                      {c.descricao || 'Cupom aplicado'}
+                    </div>
+                    <div className="mt-0.5 text-[10px] text-muted-foreground">{formatDate(c.created_at)}</div>
+                  </div>
+
+                  <div className="text-xs font-semibold">{formatBrazilianCurrency(c.valor_desconto)}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
             title="Nenhum cupom utilizado"
             subtitle="Seus cupons aplicados aparecerão aqui"
             loading={loading}
