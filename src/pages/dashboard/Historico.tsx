@@ -232,7 +232,7 @@ const Historico = () => {
   const rechargeTransactions = getRechargeTransactions(filteredTransactions);
 
   return (
-    <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
+    <div className="space-y-3 sm:space-y-6 relative z-10 px-1 sm:px-0">
       {/* Header */}
       <Card>
         <CardHeader className="p-3 sm:p-6">
@@ -250,12 +250,6 @@ const Historico = () => {
             </div>
 
             <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-              <Badge
-                variant="secondary"
-                className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5"
-              >
-                {state.allHistory.length} Registros
-              </Badge>
               <Button
                 variant="ghost"
                 size="sm"
@@ -282,12 +276,12 @@ const Historico = () => {
 
 
       {/* Seções Independentes */}
-      <div className="space-y-6">
+      <div className="space-y-3 sm:space-y-6">
         {/* Seção: Consultas */}
-        <div className="space-y-3">
-          <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white px-1">Consultas Realizadas</h2>
+        <div className="space-y-2 sm:space-y-3">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Consultas Realizadas</h2>
           <Card>
-            <CardContent className="p-4 md:p-6">
+            <CardContent className="p-3 sm:p-4 md:p-6">
               <ConsultationsSection
                 allHistory={state.allHistory}
                 formatBrazilianCurrency={formatBrazilianCurrency}
@@ -299,14 +293,14 @@ const Historico = () => {
         </div>
 
         {/* Seção: Pagamentos PIX */}
-        <div className="space-y-3">
-          <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white px-1">Pagamentos PIX</h2>
+        <div className="space-y-2 sm:space-y-3">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Pagamentos PIX</h2>
           <PixPaymentsSection />
         </div>
 
         {/* Seção: Recargas */}
-        <div className="space-y-3">
-          <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white px-1">Recargas e Depósitos</h2>
+        <div className="space-y-2 sm:space-y-3">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Recargas e Depósitos</h2>
           <RechargesSection
             rechargeTransactions={rechargeTransactions}
             formatBrazilianCurrency={formatBrazilianCurrency}
@@ -316,8 +310,8 @@ const Historico = () => {
         </div>
 
         {/* Seção: Compras */}
-        <div className="space-y-3">
-          <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white px-1">Compras e Planos</h2>
+        <div className="space-y-2 sm:space-y-3">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Compras e Planos</h2>
           <PurchasesSection
             allHistory={state.allHistory}
             formatBrazilianCurrency={formatBrazilianCurrency}
@@ -328,8 +322,8 @@ const Historico = () => {
 
         {/* Seção: Indicações */}
         {state.referralEarnings.length > 0 && (
-          <div className="space-y-3">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white px-1">Ganhos com Indicações</h2>
+          <div className="space-y-2 sm:space-y-3">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Ganhos com Indicações</h2>
             <ReferralsSection
               referralEarnings={state.referralEarnings}
               formatBrazilianCurrency={formatBrazilianCurrency}
@@ -341,8 +335,8 @@ const Historico = () => {
 
         {/* Seção: Cupons */}
         {state.cupomHistory.length > 0 && (
-          <div className="space-y-3">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white px-1">Cupons Utilizados</h2>
+          <div className="space-y-2 sm:space-y-3">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Cupons Utilizados</h2>
             <CouponsSection
               cupomHistory={state.cupomHistory}
               formatBrazilianCurrency={formatBrazilianCurrency}
