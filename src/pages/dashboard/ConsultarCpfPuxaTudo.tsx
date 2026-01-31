@@ -1452,12 +1452,16 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
           conditionalChargePending.source
         );
 
-        toast.success('Consulta cobrada', {
-          description: `R$ ${conditionalChargePending.finalPrice.toFixed(2)}`,
-          duration: 3000,
-          // Evita o “ponto preto” (ícone padrão) e mantém um visual mais leve
-          icon: '✅',
-        });
+        // Toast único (padrão 2 linhas como /dashboard/consultar-cpf-foto)
+        toast.success(
+          <div className="flex flex-col gap-0.5">
+            <div>✅ Consulta cobrada!</div>
+            <div className="text-sm text-muted-foreground">
+              Valor cobrado: R$ {conditionalChargePending.finalPrice.toFixed(2)}
+            </div>
+          </div>,
+          { duration: 3500 }
+        );
 
         await reloadApiBalance();
         loadBalances();
@@ -1892,35 +1896,22 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
         }
         
         // Exibir notificação de sucesso COM feedback detalhado
-        // Obs: Em alguns módulos (Parentes/Certidão/Telefones/Emails/Endereços) existe uma segunda notificação
-        // específica de cobrança. Para evitar duplicidade, suprimimos este toast inicial nesses fluxos.
+        // Obs: Em módulos com cobrança condicional, o toast final (cobrado/não cobrado) já é exibido depois.
+        // Para evitar duplicidade, suprimimos o toast inicial nesses fluxos.
         console.log('✅ [HANDLE_SEARCH] Exibindo toast de sucesso');
-        // Estes módulos usam cobrança condicional, mas queremos mostrar o mesmo feedback
-        // de "encontrado" usado em /dashboard/consultar-cpf-foto (sem suprimir).
-        const shouldSuppressInitialFoundToast = false;
+        const shouldSuppressInitialFoundToast = isConditionalChargeMode;
 
         if (!shouldSuppressInitialFoundToast) {
-          if (isConditionalChargeMode) {
-            // Importante: não afirmar cobrança aqui (vai depender da seção principal)
-            toast.success(
-              <div className="flex flex-col gap-0.5">
-                <div>✅ CPF encontrado!</div>
-                <div className="text-sm text-muted-foreground">Carregando resultados...</div>
-              </div>,
-              { duration: 3000 }
-            );
-          } else {
-            // Padrão EXACT do /dashboard/consultar-cpf-foto (2 linhas, mesmo spacing/alinhamento)
-            toast.success(
-              <div className="flex flex-col gap-0.5">
-                <div>✅ CPF encontrado!</div>
-                <div className="text-sm text-muted-foreground">
-                  Valor cobrado: R$ {finalPrice.toFixed(2)}
-                </div>
-              </div>,
-              { duration: 4000 }
-            );
-          }
+          // Padrão EXACT do /dashboard/consultar-cpf-foto (2 linhas, mesmo spacing/alinhamento)
+          toast.success(
+            <div className="flex flex-col gap-0.5">
+              <div>✅ CPF encontrado!</div>
+              <div className="text-sm text-muted-foreground">
+                Valor cobrado: R$ {finalPrice.toFixed(2)}
+              </div>
+            </div>,
+            { duration: 4000 }
+          );
         }
 
         // Auto scroll to result
