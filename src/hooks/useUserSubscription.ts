@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { subscriptionService, UserSubscription, PlanInfo } from '@/services/subscriptionService';
-import { getDiscount } from '@/utils/planUtils';
 import { toast } from 'sonner';
 
 export interface UserPlanStatus {
@@ -51,10 +50,12 @@ export const useUserSubscription = () => {
         // Se há assinatura ativa, buscar informações do plano
         const planResponse = await subscriptionService.getPlanInfo(subscriptionResponse.data.plan_name || '');
         
-        // Usar o desconto da assinatura diretamente ou buscar nas informações do plano
-        const finalDiscountPercentage = subscriptionResponse.data.discount_percentage || 
-                                        planResponse.data?.discount_percentage || 
-                                        getDiscount(subscriptionResponse.data.plan_name || '') || 0;
+        // Usar APENAS o desconto configurado no plano (campo discount_percentage) / assinatura.
+        // Não usar fallback local (planUtils), para refletir exatamente a configuração do painel de Personalização.
+        const finalDiscountPercentage =
+          subscriptionResponse.data.discount_percentage ??
+          planResponse.data?.discount_percentage ??
+          0;
         
         console.log('✅ [USER_SUBSCRIPTION] Desconto calculado:', {
           subscriptionDiscount: subscriptionResponse.data.discount_percentage,

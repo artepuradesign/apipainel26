@@ -16,7 +16,6 @@ import EmptyState from '../ui/empty-state';
 import ModuleCardTemplates from '@/components/configuracoes/personalization/ModuleCardTemplates';
 import ModuleGridWrapper from '@/components/configuracoes/personalization/ModuleGridWrapper';
 import { useUserSubscription } from '@/hooks/useUserSubscription';
-import { getDiscount } from '@/utils/planUtils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PanelsGridProps {
@@ -45,11 +44,10 @@ const PanelsGrid: React.FC<PanelsGridProps> = ({ activePanels }) => {
     planInfo?.name ||
     (user ? localStorage.getItem(`user_plan_${user.id}`) || 'Pré-Pago' : 'Pré-Pago');
 
-  // Desconto efetivo: prioridade para desconto vindo da assinatura ativa; fallback para o plano atual
+  // Desconto efetivo deve vir do plano configurado (discount_percentage) / assinatura.
+  // Sem fallback local, para refletir exatamente a configuração da Personalização.
   // (o painel 38 é tratado como exceção mais abaixo, tanto na exibição quanto no clique)
-  const effectiveDiscountPercentage = hasActiveSubscription
-    ? (discountPercentage || 0)
-    : (getDiscount(currentPlan) || 0);
+  const effectiveDiscountPercentage = hasActiveSubscription ? (discountPercentage || 0) : 0;
   
   console.log('🔍 [PANELSGRID] Dados do plano da API:', {
     hasActiveSubscription,
