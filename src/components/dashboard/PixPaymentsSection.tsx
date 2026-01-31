@@ -111,7 +111,7 @@ export const PixPaymentsSection = () => {
   return (
     <>
       {/* Barra de ações */}
-      <div className="flex items-center justify-end gap-2 mb-4">
+      <div className="flex items-center justify-end gap-2 mb-2 sm:mb-4">
         <Button 
           variant="outline" 
           size="sm"
@@ -200,69 +200,63 @@ export const PixPaymentsSection = () => {
               </div>
 
               {/* Lista Mobile */}
-              <div className="md:hidden space-y-3 p-4">
-                {recentPayments.map((p) => {
-                  const qrValid = isQRCodeValid(p.created_at);
-                  return (
-                    <div key={p.id} className="space-y-3 p-4 border rounded-lg">
-                      {/* QR Code - Clicável */}
-                      <div className="flex justify-center">
-                        {p.qr_code && qrValid ? (
-                          <div 
-                            className="bg-white p-3 rounded border-2 border-green-500 cursor-pointer hover:border-green-600 transition-colors"
-                            onClick={() => handleQRCodeClick(p)}
-                          >
-                            <QRCode value={p.qr_code} size={140} />
-                            <p className="text-xs text-center text-green-600 font-medium mt-2">Toque para pagar</p>
-                          </div>
-                        ) : (
-                          <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 flex items-center justify-center" style={{ width: 160, height: 160 }}>
-                            <div className="text-center">
-                              <QrCodeIcon className="w-16 h-16 mx-auto text-gray-400 mb-2" />
-                              <p className="text-xs text-gray-500">QR Code Expirado</p>
+              <div className="md:hidden p-2">
+                <div className="rounded-lg border border-border bg-card divide-y divide-border">
+                  {recentPayments.map((p) => {
+                    const qrValid = isQRCodeValid(p.created_at);
+
+                    return (
+                      <div key={p.id} className="px-3 py-2.5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-semibold truncate">
+                                {formatMoney(p.amount, p.amount_formatted)}
+                              </span>
+                              {getStatusBadge(p.status, p.status_label)}
+                            </div>
+                            <div className="mt-0.5 text-[11px] text-muted-foreground truncate">
+                              {p.description || 'RECARGA PIX'}
+                            </div>
+                            <div className="mt-0.5 text-[10px] text-muted-foreground">
+                              {formatDate(p.created_at)}
                             </div>
                           </div>
-                        )}
-                      </div>
 
-                      {/* Informações */}
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="text-2xl font-bold text-green-600">
-                            {formatMoney(p.amount, p.amount_formatted)}
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            {p.qr_code && qrValid ? (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 px-2"
+                                onClick={() => handleQRCodeClick(p)}
+                              >
+                                <QrCodeIcon className="h-4 w-4" />
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 px-2"
+                                disabled
+                                aria-disabled
+                                title="QR Code expirado"
+                              >
+                                <QrCodeIcon className="h-4 w-4" />
+                              </Button>
+                            )}
                           </div>
-                          {getStatusBadge(p.status, p.status_label)}
                         </div>
-                        <code className="text-xs bg-muted px-2 py-1 rounded block truncate">
-                          ID: {p.payment_id}
-                        </code>
+
+                        <div className="mt-1.5">
+                          <code className="text-[10px] bg-muted px-2 py-1 rounded inline-block max-w-full truncate">
+                            ID: {p.payment_id}
+                          </code>
+                        </div>
                       </div>
-                      
-                      <div className="grid grid-cols-2 gap-3 text-xs">
-                        <div>
-                          <span className="text-muted-foreground block mb-1">Descrição</span>
-                          <span className="font-medium">{p.description || 'RECARGA PIX'}</span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground block mb-1">Email</span>
-                          <span className="font-medium truncate block" title={p.payer_email || '-'}>
-                            {p.payer_email || '-'}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground block mb-1">Criado</span>
-                          <span className="font-medium">{formatDate(p.created_at)}</span>
-                        </div>
-                        {p.approved_at && (
-                          <div>
-                            <span className="text-muted-foreground block mb-1">Aprovado</span>
-                            <span className="font-medium">{formatDate(p.approved_at)}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </>
           )}
