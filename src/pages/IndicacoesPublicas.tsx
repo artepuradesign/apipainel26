@@ -36,8 +36,8 @@ const IndicacoesPublicas = () => {
       <MenuSuperior />
 
       <main className="w-full flex-1">
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl py-8 sm:py-10">
-          <div className="mb-4 sm:mb-6">
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl pt-4 pb-8 sm:pt-6 sm:pb-10">
+          <div className="mb-4">
             <DashboardTitleCard
               title="Indicações"
               icon={<Gift className="h-4 w-4 sm:h-5 sm:w-5" />}
