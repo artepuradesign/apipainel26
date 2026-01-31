@@ -1,6 +1,7 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { History, RefreshCw, Wifi, WifiOff, ArrowLeft } from 'lucide-react';
 
@@ -11,7 +12,6 @@ import ReferralsSection from '@/components/historico/sections/ReferralsSection';
 import CouponsSection from '@/components/historico/sections/CouponsSection';
 import PurchasesSection from '@/components/historico/sections/PurchasesSection';
 import PixPaymentsSection from '@/components/dashboard/PixPaymentsSection';
-import MobileHistorySection from '@/components/historico/MobileHistorySection';
 import { useAuth } from '@/contexts/AuthContext';
 import { walletApiService } from '@/services/walletApiService';
 import { cupomApiService } from '@/services/cupomApiService';
@@ -23,7 +23,6 @@ import {
   getRechargeTransactions
 } from '@/utils/historicoUtils';
 import { useNavigate } from 'react-router-dom';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 // Estado simplificado e otimizado
 interface HistoricoState {
@@ -39,7 +38,6 @@ interface HistoricoState {
 const Historico = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const isMobile = useIsMobile();
   const [state, setState] = useState<HistoricoState>({
     allHistory: [],
     transactions: [],
@@ -241,12 +239,12 @@ const Historico = () => {
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0 flex-1">
               <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                <History className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                <History className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 flex-shrink-0" />
                 <span className="truncate">Histórico Completo</span>
                 {state.error ? (
-                  <WifiOff className="h-3 w-3 sm:h-4 sm:w-4 text-destructive flex-shrink-0" />
+                  <WifiOff className="h-3 w-3 sm:h-4 sm:w-4 text-red-500 flex-shrink-0" />
                 ) : (
-                  <Wifi className="h-3 w-3 sm:h-4 sm:w-4 text-primary flex-shrink-0" />
+                  <Wifi className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 flex-shrink-0" />
                 )}
               </CardTitle>
             </div>
@@ -280,7 +278,8 @@ const Historico = () => {
       {/* Seções Independentes */}
       <div className="space-y-3 sm:space-y-6">
         {/* Seção: Consultas */}
-        <MobileHistorySection title="Consultas Realizadas" isMobile={isMobile} defaultOpen>
+        <div className="space-y-2 sm:space-y-3">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Consultas Realizadas</h2>
           <Card>
             <CardContent className="p-3 sm:p-4 md:p-6">
               <ConsultationsSection
@@ -291,55 +290,60 @@ const Historico = () => {
               />
             </CardContent>
           </Card>
-        </MobileHistorySection>
+        </div>
 
         {/* Seção: Pagamentos PIX */}
-        <MobileHistorySection title="Pagamentos PIX" isMobile={isMobile}>
+        <div className="space-y-2 sm:space-y-3">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Pagamentos PIX</h2>
           <PixPaymentsSection />
-        </MobileHistorySection>
+        </div>
 
         {/* Seção: Recargas */}
-        <MobileHistorySection title="Recargas e Depósitos" isMobile={isMobile}>
+        <div className="space-y-2 sm:space-y-3">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Recargas e Depósitos</h2>
           <RechargesSection
             rechargeTransactions={rechargeTransactions}
             formatBrazilianCurrency={formatBrazilianCurrency}
             formatDate={formatDate}
             loading={state.loading}
           />
-        </MobileHistorySection>
+        </div>
 
         {/* Seção: Compras */}
-        <MobileHistorySection title="Compras e Planos" isMobile={isMobile}>
+        <div className="space-y-2 sm:space-y-3">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Compras e Planos</h2>
           <PurchasesSection
             allHistory={state.allHistory}
             formatBrazilianCurrency={formatBrazilianCurrency}
             formatDate={formatDate}
             loading={state.loading}
           />
-        </MobileHistorySection>
+        </div>
 
         {/* Seção: Indicações */}
         {state.referralEarnings.length > 0 && (
-          <MobileHistorySection title="Ganhos com Indicações" isMobile={isMobile}>
+          <div className="space-y-2 sm:space-y-3">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Ganhos com Indicações</h2>
             <ReferralsSection
               referralEarnings={state.referralEarnings}
               formatBrazilianCurrency={formatBrazilianCurrency}
               formatDate={formatDate}
               loading={state.loading}
             />
-          </MobileHistorySection>
+          </div>
         )}
 
         {/* Seção: Cupons */}
         {state.cupomHistory.length > 0 && (
-          <MobileHistorySection title="Cupons Utilizados" isMobile={isMobile}>
+          <div className="space-y-2 sm:space-y-3">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground px-1">Cupons Utilizados</h2>
             <CouponsSection
               cupomHistory={state.cupomHistory}
               formatBrazilianCurrency={formatBrazilianCurrency}
               formatDate={formatDate}
               loading={state.loading}
             />
-          </MobileHistorySection>
+          </div>
         )}
       </div>
     </div>
