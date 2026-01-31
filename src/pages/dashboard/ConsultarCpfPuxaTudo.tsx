@@ -1902,27 +1902,24 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
         if (!shouldSuppressInitialFoundToast) {
           if (isConditionalChargeMode) {
             // Importante: não afirmar cobrança aqui (vai depender da seção principal)
-            toast.success('CPF encontrado', {
-              description: (
-                <div className="flex flex-col gap-0.5">
-                  <span>Carregando resultados...</span>
-                  <span className="text-muted-foreground">{`Dados de ${cpfData.nome} carregados com sucesso`}</span>
-                </div>
-              ),
-              duration: 3000,
-              icon: '🔎',
-            });
+            toast.success(
+              <div className="flex flex-col gap-0.5">
+                <div>✅ CPF encontrado!</div>
+                <div className="text-sm text-muted-foreground">Carregando resultados...</div>
+              </div>,
+              { duration: 3000 }
+            );
           } else {
-            toast.success('CPF encontrado', {
-              description: (
-                <div className="flex flex-col gap-0.5">
-                  <span>{`Valor cobrado: R$ ${finalPrice.toFixed(2)}`}</span>
-                  <span className="text-muted-foreground">{`Dados de ${cpfData.nome} carregados com sucesso`}</span>
+            // Padrão EXACT do /dashboard/consultar-cpf-foto (2 linhas, mesmo spacing/alinhamento)
+            toast.success(
+              <div className="flex flex-col gap-0.5">
+                <div>✅ CPF encontrado!</div>
+                <div className="text-sm text-muted-foreground">
+                  Valor cobrado: R$ {finalPrice.toFixed(2)}
                 </div>
-              ),
-              icon: '✅',
-              duration: 4000,
-            });
+              </div>,
+              { duration: 4000 }
+            );
           }
         }
 
