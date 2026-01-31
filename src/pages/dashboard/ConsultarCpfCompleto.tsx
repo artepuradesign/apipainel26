@@ -809,7 +809,28 @@ const ConsultarCpfCompleto: React.FC<ConsultarCpfCompletoProps> = ({ moduleId: m
           detail: { shouldAnimate: true, immediate: true }
         }));
 
-        toast.success(`✅ Foto(s) encontrada(s)! Valor cobrado: R$ ${finalPrice.toFixed(2)}`);
+        const formattedCharged = new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        }).format(finalPrice);
+
+        // Toast custom para evitar ícone padrão ("bola preta") e quebrar o valor em outra linha
+        toast.custom(
+          () => (
+            <div className="flex items-start gap-2">
+              <CheckCircle className="mt-0.5 h-4 w-4 text-primary" />
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-foreground">
+                  Foto(s) encontrada(s)!
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Valor cobrado: {formattedCharged}
+                </div>
+              </div>
+            </div>
+          ),
+          { duration: 4000 }
+        );
       } finally {
         setCpfFotoChargePending(null);
         setCpfFotoCharging(false);
