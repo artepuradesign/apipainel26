@@ -38,8 +38,12 @@ const PanelsGrid: React.FC<PanelsGridProps> = ({ activePanels }) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   
-  // Obter plano atual da API (subscription > planInfo > fallback)
-  const currentPlan = subscription?.plan_name || planInfo?.name || user ? localStorage.getItem(`user_plan_${user.id}`) || 'Pré-Pago' : 'Pré-Pago';
+  // Obter plano atual (subscription > planInfo > fallback em localStorage)
+  // Importante: parênteses para evitar precedência incorreta entre `||` e ternário.
+  const currentPlan =
+    subscription?.plan_name ||
+    planInfo?.name ||
+    (user ? localStorage.getItem(`user_plan_${user.id}`) || 'Pré-Pago' : 'Pré-Pago');
 
   // Desconto efetivo: prioridade para desconto vindo da assinatura ativa; fallback para o plano atual
   // (o painel 38 é tratado como exceção mais abaixo, tanto na exibição quanto no clique)
@@ -241,7 +245,8 @@ const PanelsGrid: React.FC<PanelsGridProps> = ({ activePanels }) => {
                           title: module.title,
                           description: module.description,
                           price: formatPrice(finalDiscountedPrice),
-                          originalPrice: shouldShowDiscount ? formatPrice(originalPrice) : undefined,
+                          // No template, o valor original aparece com moeda (ex.: "R$ 3,00")
+                          originalPrice: shouldShowDiscount ? `R$ ${formatPrice(originalPrice)}` : undefined,
                           discountPercentage: shouldShowDiscount ? effectiveDiscountPercentage : undefined,
                           status: module.is_active ? 'ativo' : 'inativo',
                           operationalStatus: module.operational_status === 'maintenance' ? 'manutencao' : module.operational_status,
