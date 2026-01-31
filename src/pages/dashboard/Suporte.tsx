@@ -229,31 +229,31 @@ const Suporte = () => {
             </div>
             Perguntas Frequentes
           </CardTitle>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-sm sm:text-base text-muted-foreground mt-2">
             Explore nossa base de conhecimento e encontre respostas rápidas
           </p>
         </CardHeader>
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-5 sm:space-y-8">
           {/* Busca aprimorada */}
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
             <Input
               placeholder="Digite sua dúvida ou palavra-chave..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 h-12 text-base border-2 focus:border-primary/50 bg-background/50"
+              className="pl-10 sm:pl-12 h-10 sm:h-12 text-sm sm:text-base border-2 focus:border-primary/50 bg-background/50"
             />
           </div>
 
           {/* Filtros por Categoria com design moderno */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Filtrar por categoria</h3>
+            <h3 className="font-semibold text-base sm:text-lg">Filtrar por categoria</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               <Button
                 variant={searchTerm === '' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setSearchTerm('')}
-                className="h-12 justify-start font-medium"
+                className="h-10 sm:h-12 justify-start font-medium"
               >
                 <HelpCircle className="h-4 w-4 mr-2" />
                 Todas
@@ -264,7 +264,7 @@ const Suporte = () => {
                   variant={searchTerm === category ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSearchTerm(category)}
-                  className="h-12 justify-start font-medium"
+                  className="h-10 sm:h-12 justify-start font-medium"
                 >
                   {getCategoryIcon(category)}
                   <span className="ml-2">{category}</span>
@@ -282,25 +282,25 @@ const Suporte = () => {
                 onOpenChange={() => toggleItem(faq.id)}
               >
                 <CollapsibleTrigger className="w-full group">
-                  <div className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 hover:shadow-md group-hover:scale-[1.02] ${getCategoryStyle(faq.category)}`}>
-                      <div className="flex items-center justify-between p-4 sm:p-6">
+                  <div className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 hover:shadow-md sm:group-hover:scale-[1.02] ${getCategoryStyle(faq.category)}`}>
+                      <div className="flex items-center justify-between p-3 sm:p-6">
                       <div className="flex-1 text-left">
                         <div className="flex items-start gap-3 mb-2">
                           <div className={`p-2 rounded-lg ${faq.category === 'Consultas' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : 'bg-white/50 text-foreground dark:bg-gray-800/50'}`}>
                             {getCategoryIcon(faq.category)}
                           </div>
                           <div className="flex-1">
-                              <h4 className="font-semibold text-base sm:text-lg leading-tight group-hover:text-primary transition-colors">
+                              <h4 className="font-semibold text-sm sm:text-lg leading-tight group-hover:text-primary transition-colors">
                               {faq.question}
                             </h4>
                           </div>
                         </div>
                           <div className="flex flex-wrap items-center gap-2 sm:gap-3 ml-11">
-                          <Badge variant="secondary" className="text-xs font-medium">
+                          <Badge variant="secondary" className="text-[11px] sm:text-xs font-medium">
                             {faq.category}
                           </Badge>
                           {faq.category === 'Consultas' && (
-                            <Badge className="text-xs bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/50 dark:text-blue-300">
+                            <Badge className="text-[11px] sm:text-xs bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/50 dark:text-blue-300">
                               DESTAQUE
                             </Badge>
                           )}
@@ -319,9 +319,9 @@ const Suporte = () => {
                   </div>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 -mt-2">
-                      <div className="bg-white/70 dark:bg-gray-800/70 rounded-lg p-4 ml-11 border-l-4 border-primary/30">
-                      <p className="text-muted-foreground leading-relaxed">
+                    <div className="px-3 sm:px-6 pb-3 sm:pb-6 -mt-2">
+                      <div className="bg-white/70 dark:bg-gray-800/70 rounded-lg p-3 sm:p-4 ml-11 border-l-4 border-primary/30">
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>
@@ -338,7 +338,7 @@ const Suporte = () => {
                 onClick={() => setShowAll(true)}
                 variant="outline"
                 size="lg"
-                className="h-12 px-8 font-semibold border-2 hover:border-primary/50 hover:bg-primary/5"
+                className="h-10 sm:h-12 px-6 sm:px-8 font-semibold border-2 hover:border-primary/50 hover:bg-primary/5"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 Ver mais {filteredFAQs.length - 5} perguntas
@@ -362,7 +362,7 @@ const Suporte = () => {
 
           {/* Estado vazio melhorado */}
           {filteredFAQs.length === 0 && (
-            <div className="text-center py-12">
+            <div className="text-center py-10 sm:py-12">
               <div className="p-4 bg-muted/30 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
                 <HelpCircle className="h-12 w-12 text-muted-foreground" />
               </div>
@@ -375,10 +375,10 @@ const Suporte = () => {
 
           {/* Informações de contato */}
           {!searchTerm && (
-            <div className="mt-12 p-6 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl border border-primary/10">
+            <div className="mt-8 sm:mt-12 p-4 sm:p-6 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl border border-primary/10">
               <div className="text-center">
                 <h3 className="font-semibold text-lg mb-2">Ainda tem dúvidas?</h3>
-                <p className="text-muted-foreground mb-4">
+                <p className="text-sm sm:text-base text-muted-foreground mb-4">
                   Nossa equipe está aqui para ajudar! Entre em contato conosco através dos canais disponíveis.
                 </p>
                 <div className="flex flex-wrap gap-3 justify-center">
