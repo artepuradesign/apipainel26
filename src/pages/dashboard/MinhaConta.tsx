@@ -53,7 +53,6 @@ const MinhaConta = () => {
       {isNewRoute ? (
         <DashboardTitleCard
           title={pageTitle}
-          subtitle={pageSubtitle}
           icon={<User className="h-4 w-4 sm:h-5 sm:w-5" />}
         />
       ) : (

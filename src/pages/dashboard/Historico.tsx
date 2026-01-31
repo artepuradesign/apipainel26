@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { History, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import { History, RefreshCw, Wifi, WifiOff, ArrowLeft } from 'lucide-react';
 
 import AllHistorySection from '@/components/historico/sections/AllHistorySection';
 import ConsultationsSection from '@/components/historico/sections/ConsultationsSection';
@@ -22,6 +22,7 @@ import {
   filterTransactions,
   getRechargeTransactions
 } from '@/utils/historicoUtils';
+import { useNavigate } from 'react-router-dom';
 
 // Estado simplificado e otimizado
 interface HistoricoState {
@@ -36,6 +37,7 @@ interface HistoricoState {
 
 const Historico = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [state, setState] = useState<HistoricoState>({
     allHistory: [],
     transactions: [],
@@ -230,30 +232,28 @@ const Historico = () => {
   const rechargeTransactions = getRechargeTransactions(filteredTransactions);
 
   return (
-    <div className="space-y-6 relative z-10">
+    <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
       {/* Header */}
       <Card>
-        <CardHeader className="px-4 md:px-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex-1">
-              <CardTitle className="flex items-center gap-2 text-base md:text-lg">
-                <History className="h-4 w-4 md:h-5 md:w-5 text-blue-500" />
-                Histórico Completo
+        <CardHeader className="p-3 sm:p-6">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <History className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 flex-shrink-0" />
+                <span className="truncate">Histórico Completo</span>
                 {state.error ? (
-                  <WifiOff className="h-3 w-3 md:h-4 md:w-4 text-red-500" />
+                  <WifiOff className="h-3 w-3 sm:h-4 sm:w-4 text-red-500 flex-shrink-0" />
                 ) : (
-                  <Wifi className="h-3 w-3 md:h-4 md:w-4 text-green-500" />
+                  <Wifi className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 flex-shrink-0" />
                 )}
               </CardTitle>
-              <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                {state.error ? 
-                  'Erro ao conectar - dados podem estar desatualizados' : 
-                  'Dados sincronizados com a API externa'
-                }
-              </p>
             </div>
-            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto">
-              <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-center">
+
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+              <Badge
+                variant="secondary"
+                className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5"
+              >
                 {state.allHistory.length} Registros
               </Badge>
               <Button
@@ -261,9 +261,19 @@ const Historico = () => {
                 size="sm"
                 onClick={refreshData}
                 disabled={state.loading}
-                className="h-8 w-8 p-0 mx-auto md:mx-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
               >
-                <RefreshCw className={`h-4 w-4 ${state.loading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${state.loading ? 'animate-spin' : ''}`} />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => navigate('/dashboard')}
+                className="rounded-full h-9 w-9"
+                aria-label="Voltar"
+                title="Voltar"
+              >
+                <ArrowLeft className="h-4 w-4" />
               </Button>
             </div>
           </div>

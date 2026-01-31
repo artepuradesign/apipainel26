@@ -22,6 +22,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { cupomApiService, Cupom } from '@/services/cupomApiService';
 import CupomValidationModal from '@/components/cupons/CupomValidationModal';
+import DashboardTitleCard from '@/components/dashboard/DashboardTitleCard';
 
 const Cupons = () => {
   const { user, isSupport } = useAuth();
@@ -185,7 +186,11 @@ const Cupons = () => {
   const stats = calculateStats();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
+      <DashboardTitleCard
+        title="Cupons"
+        icon={<Ticket className="h-4 w-4 sm:h-5 sm:w-5" />}
+      />
       {/* Estatísticas - Cards Compactos (ocultos em mobile) */}
       <div className="hidden sm:grid grid-cols-2 gap-3">
         {/* Card Disponíveis */}

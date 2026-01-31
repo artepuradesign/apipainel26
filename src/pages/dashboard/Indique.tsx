@@ -241,7 +241,6 @@ const Indique = () => {
       <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
         <DashboardTitleCard
           title="Programa de Indicação"
-          subtitle="Convide amigos e ganhe bônus na sua carteira"
           icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
         />
         <Card>
@@ -271,7 +270,6 @@ const Indique = () => {
       <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
         <DashboardTitleCard
           title="Programa de Indicação"
-          subtitle="Convide amigos e ganhe bônus na sua carteira"
           icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
         />
         <Card>
@@ -306,7 +304,6 @@ const Indique = () => {
     <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
       <DashboardTitleCard
         title="Programa de Indicação"
-        subtitle="Convide amigos e ganhe bônus na sua carteira"
         icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
       />
       {/* Layout responsivo: 2 colunas no desktop, 1 coluna no mobile */}
