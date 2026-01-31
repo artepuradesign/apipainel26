@@ -182,16 +182,6 @@ const Carteira = () => {
               </p>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => navigate('/dashboard')}
-                className="rounded-full h-9 w-9"
-                aria-label="Voltar"
-                title="Voltar"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
               <Badge variant="secondary" className={`text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 ${error ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" : "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"}`}>
                 {error ? 'Erro' : 'Ativa'}
               </Badge>
@@ -203,6 +193,16 @@ const Carteira = () => {
                 className="h-7 w-7 sm:h-8 sm:w-8 p-0"
               >
                 <RefreshCw className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => navigate('/dashboard')}
+                className="rounded-full h-9 w-9"
+                aria-label="Voltar"
+                title="Voltar"
+              >
+                <ArrowLeft className="h-4 w-4" />
               </Button>
             </div>
           </div>
