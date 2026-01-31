@@ -5,6 +5,8 @@ import SimpleFooter from "@/components/SimpleFooter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import DashboardTitleCard from "@/components/dashboard/DashboardTitleCard";
+import { Gift } from "lucide-react";
 
 const IndicacoesPublicas = () => {
   useEffect(() => {
@@ -35,12 +37,13 @@ const IndicacoesPublicas = () => {
 
       <main className="w-full flex-1">
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl py-8 sm:py-10">
-          <header className="mb-6">
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Indicações</h1>
-            <p className="text-sm sm:text-base text-muted-foreground mt-2">
-              Convide amigos com seu código e ganhem bônus automaticamente quando o indicado fizer o primeiro login.
-            </p>
-          </header>
+          <div className="mb-4 sm:mb-6">
+            <DashboardTitleCard
+              title="Indicações"
+              icon={<Gift className="h-4 w-4 sm:h-5 sm:w-5" />}
+              backTo="/"
+            />
+          </div>
 
           <div className="grid gap-4">
             <Card className="bg-background border-border">
