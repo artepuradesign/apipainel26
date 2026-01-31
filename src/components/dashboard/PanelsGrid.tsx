@@ -40,13 +40,20 @@ const PanelsGrid: React.FC<PanelsGridProps> = ({ activePanels }) => {
   
   // Obter plano atual da API (subscription > planInfo > fallback)
   const currentPlan = subscription?.plan_name || planInfo?.name || user ? localStorage.getItem(`user_plan_${user.id}`) || 'Pré-Pago' : 'Pré-Pago';
+
+  // Desconto efetivo: prioridade para desconto vindo da assinatura ativa; fallback para o plano atual
+  // (o painel 38 é tratado como exceção mais abaixo, tanto na exibição quanto no clique)
+  const effectiveDiscountPercentage = hasActiveSubscription
+    ? (discountPercentage || 0)
+    : (getDiscount(currentPlan) || 0);
   
   console.log('🔍 [PANELSGRID] Dados do plano da API:', {
     hasActiveSubscription,
     subscriptionPlan: subscription?.plan_name,
     planInfoName: planInfo?.name,
     discountPercentageFromAPI: discountPercentage,
-    currentPlan
+    currentPlan,
+    effectiveDiscountPercentage
   });
   
   const getIconComponent = (iconName: string) => {
@@ -133,8 +140,15 @@ const PanelsGrid: React.FC<PanelsGridProps> = ({ activePanels }) => {
 
     // Calcular preço - apenas com desconto se houver plano ativo
     const originalPrice = parseFloat(module.price?.toString().replace(',', '.') || '0');
-    const finalPrice = hasActiveSubscription && discountPercentage > 0 
-      ? calculateDiscountedPrice(originalPrice, module.panel_id).discountedPrice 
+
+    const shouldApplyDiscountOnClick = effectiveDiscountPercentage > 0 && module.panel_id !== 38;
+
+    // calculateDiscountedPrice do hook usa o desconto atual do usuário (já resolvido pelo hook).
+    // Quando não há assinatura ativa, usamos o fallback pelo plano atual (planUtils) para manter consistência no /dashboard.
+    const finalPrice = shouldApplyDiscountOnClick
+      ? (hasActiveSubscription
+          ? calculateDiscountedPrice(originalPrice, module.panel_id).discountedPrice
+          : Math.max(originalPrice - (originalPrice * effectiveDiscountPercentage) / 100, 0.01))
       : originalPrice;
     
     if (totalAvailableBalance < finalPrice) {
@@ -198,10 +212,13 @@ const PanelsGrid: React.FC<PanelsGridProps> = ({ activePanels }) => {
                    // Calcular preços - apenas com desconto se houver plano ativo da API
                    // Painel 38 não deve mostrar desconto
                   const originalPrice = parseFloat(module.price?.toString().replace(',', '.') || '0');
-                  const shouldShowDiscount = hasActiveSubscription && discountPercentage > 0 && module.panel_id !== 38;
-                  const finalDiscountedPrice = shouldShowDiscount 
-                    ? calculateDiscountedPrice(originalPrice, module.panel_id).discountedPrice 
-                    : originalPrice;
+                   const shouldShowDiscount = effectiveDiscountPercentage > 0 && module.panel_id !== 38;
+
+                   const finalDiscountedPrice = shouldShowDiscount
+                     ? (hasActiveSubscription
+                         ? calculateDiscountedPrice(originalPrice, module.panel_id).discountedPrice
+                         : Math.max(originalPrice - (originalPrice * effectiveDiscountPercentage) / 100, 0.01))
+                     : originalPrice;
                   
                   console.log('🔍 Debug PanelsGrid - Dados do módulo:', {
                     moduleName: module.title,
@@ -210,10 +227,11 @@ const PanelsGrid: React.FC<PanelsGridProps> = ({ activePanels }) => {
                     hasActiveSubscription,
                     shouldShowDiscount,
                     discountPercentageFromAPI: discountPercentage,
+                     effectiveDiscountPercentage,
                     currentPlan,
                     formatPrice: formatPrice(finalDiscountedPrice),
                     willShowOriginalPrice: shouldShowDiscount ? formatPrice(originalPrice) : undefined,
-                    willShowDiscountPercentage: shouldShowDiscount ? discountPercentage : undefined
+                     willShowDiscountPercentage: shouldShowDiscount ? effectiveDiscountPercentage : undefined
                   });
                   
                    return (
@@ -224,7 +242,7 @@ const PanelsGrid: React.FC<PanelsGridProps> = ({ activePanels }) => {
                           description: module.description,
                           price: formatPrice(finalDiscountedPrice),
                           originalPrice: shouldShowDiscount ? formatPrice(originalPrice) : undefined,
-                          discountPercentage: shouldShowDiscount ? discountPercentage : undefined,
+                          discountPercentage: shouldShowDiscount ? effectiveDiscountPercentage : undefined,
                           status: module.is_active ? 'ativo' : 'inativo',
                           operationalStatus: module.operational_status === 'maintenance' ? 'manutencao' : module.operational_status,
                           iconSize: 'medium',
