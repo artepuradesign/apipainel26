@@ -1428,9 +1428,14 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
     if (conditionalChargeInFlightRef.current) return;
 
     if (requiredCount === 0) {
-      toast.info('Consulta não cobrada', {
-        description: 'Nenhum registro encontrado na seção principal.'
-      });
+      // Mensagem de "não encontrado" no mesmo padrão visual do toast de "encontrado"
+      toast.info(
+        <div className="flex flex-col gap-0.5">
+          <div>❌ Nenhum registro encontrado</div>
+          <div className="text-sm text-muted-foreground">Consulta não cobrada</div>
+        </div>,
+        { duration: 3500 }
+      );
       setConditionalChargePending(null);
       return;
     }
@@ -1890,14 +1895,9 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
         // Obs: Em alguns módulos (Parentes/Certidão/Telefones/Emails/Endereços) existe uma segunda notificação
         // específica de cobrança. Para evitar duplicidade, suprimimos este toast inicial nesses fluxos.
         console.log('✅ [HANDLE_SEARCH] Exibindo toast de sucesso');
-        const suppressInitialFoundToastSources = new Set([
-          'consultar-cpf-parentes',
-          'consultar-cpf-certidao',
-          'consultar-cpf-telefones',
-          'consultar-cpf-emails',
-          'consultar-cpf-enderecos',
-        ]);
-        const shouldSuppressInitialFoundToast = suppressInitialFoundToastSources.has(source);
+        // Estes módulos usam cobrança condicional, mas queremos mostrar o mesmo feedback
+        // de "encontrado" usado em /dashboard/consultar-cpf-foto (sem suprimir).
+        const shouldSuppressInitialFoundToast = false;
 
         if (!shouldSuppressInitialFoundToast) {
           if (isConditionalChargeMode) {
