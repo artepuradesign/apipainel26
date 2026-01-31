@@ -43,7 +43,7 @@ const IndicacoesPublicas = () => {
           </header>
 
           <div className="grid gap-4">
-            <Card className="bg-background/70 backdrop-blur border-border/60">
+            <Card className="bg-background border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Visão geral</CardTitle>
               </CardHeader>
@@ -59,7 +59,7 @@ const IndicacoesPublicas = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-background/70 backdrop-blur border-border/60">
+            <Card className="bg-background border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Como funciona (passo a passo)</CardTitle>
               </CardHeader>
@@ -72,7 +72,7 @@ const IndicacoesPublicas = () => {
                   <p className="text-sm text-muted-foreground">
                     O usuário se cadastra com um link contendo o parâmetro <code className="px-1 py-0.5 rounded bg-muted">ref</code>.
                   </p>
-                  <div className="text-xs rounded-md border border-border bg-muted/40 p-3 font-mono break-all">
+                  <div className="text-xs rounded-md border border-border bg-muted p-3 font-mono break-all">
                     /registration?ref=SEU_CODIGO
                   </div>
                 </div>
@@ -103,7 +103,7 @@ const IndicacoesPublicas = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-background/70 backdrop-blur border-border/60">
+            <Card className="bg-background border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Onde acompanhar</CardTitle>
               </CardHeader>
