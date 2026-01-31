@@ -2398,10 +2398,10 @@ Todos os direitos reservados.`;
 
             {/* Modal de Verificação */}
             <Dialog open={verificationLoadingOpen} onOpenChange={setVerificationLoadingOpen}>
-              <DialogContent className="sm:max-w-[320px]">
+              <DialogContent className="w-[92vw] max-w-[340px] p-4 sm:max-w-[320px] sm:p-6">
                 <DialogHeader>
-                  <DialogTitle className="text-center">Processando Consulta</DialogTitle>
-                  <DialogDescription className="text-center">
+                  <DialogTitle className="text-center text-base sm:text-lg">Processando Consulta</DialogTitle>
+                  <DialogDescription className="text-center text-sm sm:text-base">
                     {verificationPhase === 'retry'
                       ? 'Ainda processando... aguardando mais 5s para tentar novamente.'
                       : verificationPhase === 'initial'
@@ -2410,15 +2410,15 @@ Todos os direitos reservados.`;
                   </DialogDescription>
                 </DialogHeader>
 
-                <div className="flex flex-col items-center space-y-4 py-6">
+                <div className="flex flex-col items-center space-y-3 py-3 sm:space-y-4 sm:py-6">
                   <div className="relative">
-                    <div className="w-16 h-16 bg-gradient-to-br from-brand-purple/20 to-pink-500/20 rounded-full flex items-center justify-center">
-                      <LoadingSpinner size="lg" className="text-brand-purple" />
+                    <div className="h-12 w-12 sm:h-16 sm:w-16 bg-gradient-to-br from-brand-purple/20 to-pink-500/20 rounded-full flex items-center justify-center">
+                      <LoadingSpinner size="md" className="text-brand-purple" />
                     </div>
-                    <div className="absolute inset-0 w-16 h-16 bg-gradient-to-br from-brand-purple/10 to-pink-500/10 rounded-full animate-ping"></div>
+                    <div className="absolute inset-0 h-12 w-12 sm:h-16 sm:w-16 bg-gradient-to-br from-brand-purple/10 to-pink-500/10 rounded-full animate-ping"></div>
                   </div>
 
-                  <div className="w-full max-w-xs space-y-2">
+                  <div className="w-full max-w-[260px] sm:max-w-xs space-y-2">
                     {verificationPhase ? (
                       <>
                         <Progress value={verificationProgress} className="w-full" />
