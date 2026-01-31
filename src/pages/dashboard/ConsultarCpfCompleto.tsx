@@ -1760,15 +1760,33 @@ const ConsultarCpfCompleto: React.FC<ConsultarCpfCompletoProps> = ({ moduleId: m
         console.log('✅ [HANDLE_SEARCH] Exibindo toast de sucesso');
         const shouldSuppressInitialFoundToast = source === 'consultar-cpf-foto';
         if (!shouldSuppressInitialFoundToast) {
-          toast.success(
-            isCpfFoto
-              ? '✅ CPF encontrado! Carregando fotos...'
-              : `✅ CPF encontrado! Valor cobrado: R$ ${finalPrice.toFixed(2)}`,
-            {
-              description: `Dados de ${cpfData.nome} carregados com sucesso`,
-              duration: 4000
-            }
-          );
+          if (isCpfFoto) {
+            toast.success('CPF encontrado', {
+              description: (
+                <div className="flex flex-col gap-0.5">
+                  <div>Carregando fotos...</div>
+                  <div className="text-sm text-muted-foreground">
+                    {`Dados de ${cpfData.nome} carregados com sucesso`}
+                  </div>
+                </div>
+              ),
+              duration: 3000,
+              icon: '🔎',
+            });
+          } else {
+            toast.success('CPF encontrado', {
+              description: (
+                <div className="flex flex-col gap-0.5">
+                  <div>{`Valor cobrado: R$ ${finalPrice.toFixed(2)}`}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {`Dados de ${cpfData.nome} carregados com sucesso`}
+                  </div>
+                </div>
+              ),
+              duration: 4000,
+              icon: '✅',
+            });
+          }
         }
 
         // Auto scroll to result
