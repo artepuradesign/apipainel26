@@ -1447,8 +1447,11 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
           conditionalChargePending.source
         );
 
-        toast.success(`✅ Consulta cobrada: R$ ${conditionalChargePending.finalPrice.toFixed(2)}`, {
+        toast.success('Consulta cobrada', {
+          description: `R$ ${conditionalChargePending.finalPrice.toFixed(2)}`,
           duration: 3000,
+          // Evita o “ponto preto” (ícone padrão) e mantém um visual mais leve
+          icon: '✅',
         });
 
         await reloadApiBalance();
@@ -1899,14 +1902,21 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
         if (!shouldSuppressInitialFoundToast) {
           if (isConditionalChargeMode) {
             // Importante: não afirmar cobrança aqui (vai depender da seção principal)
-            toast.success('✅ CPF encontrado! Carregando resultados...', {
+            toast.success('CPF encontrado! Carregando resultados...', {
               description: `Dados de ${cpfData.nome} carregados com sucesso`,
               duration: 3000,
+              icon: '🔎',
             });
           } else {
-            toast.success(`✅ CPF encontrado! Valor cobrado: R$ ${finalPrice.toFixed(2)}` , {
-              description: `Dados de ${cpfData.nome} carregados com sucesso`,
-              duration: 4000
+            toast.success('CPF encontrado', {
+              description: (
+                <div className="flex flex-col gap-0.5">
+                  <span>{`Valor cobrado: R$ ${finalPrice.toFixed(2)}`}</span>
+                  <span className="text-muted-foreground">{`Dados de ${cpfData.nome} carregados com sucesso`}</span>
+                </div>
+              ),
+              icon: '✅',
+              duration: 4000,
             });
           }
         }
