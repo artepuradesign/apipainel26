@@ -1,7 +1,9 @@
 
 /* Sonner toast customization */
 [data-sonner-toast] {
-  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100;
+  /* Visual mais moderno (glass + sombra) usando tokens semânticos */
+  @apply bg-background/95 text-foreground border border-border rounded-xl shadow-lg;
+  @apply backdrop-blur-md;
 }
 
 [data-sonner-toast][data-styled="true"] {
@@ -9,11 +11,11 @@
 }
 
 [data-sonner-toast] [data-title] {
-  @apply text-gray-900 dark:text-gray-100 font-medium;
+  @apply text-foreground font-medium;
 }
 
 [data-sonner-toast] [data-description] {
-  @apply text-gray-500 dark:text-gray-400;
+  @apply text-muted-foreground;
 }
 
 [data-sonner-toast] [data-action] {
@@ -22,6 +24,12 @@
 
 [data-sonner-toast] [data-cancel] {
   @apply bg-muted text-muted-foreground;
+}
+
+/* Ícone padrão do Sonner pode ficar “pesado” visualmente em alguns temas;
+   garantimos que ele herde a cor do texto (evita o “ponto preto” estourado). */
+[data-sonner-toast] [data-icon] {
+  @apply text-foreground/80;
 }
 
 /* Smooth transitions for theme switching */
