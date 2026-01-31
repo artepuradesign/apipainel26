@@ -1588,16 +1588,16 @@ const ConsultarCpfPuxaTudo = () => {
         
         // Exibir notificação de sucesso COM feedback detalhado
         console.log('✅ [HANDLE_SEARCH] Exibindo toast de sucesso');
-        toast.success('CPF encontrado', {
-          description: (
-            <div className="flex flex-col gap-0.5">
-              <span>{`Valor cobrado: R$ ${finalPrice.toFixed(2)}`}</span>
-              <span className="text-muted-foreground">{`Dados de ${cpfData.nome} carregados com sucesso`}</span>
+        // Padrão EXACT do /dashboard/consultar-cpf-foto (2 linhas, mesmo spacing/alinhamento)
+        toast.success(
+          <div className="flex flex-col gap-0.5">
+            <div>✅ CPF encontrado!</div>
+            <div className="text-sm text-muted-foreground">
+              Valor cobrado: R$ {finalPrice.toFixed(2)}
             </div>
-          ),
-          duration: 4000,
-          icon: '✅',
-        });
+          </div>,
+          { duration: 4000 }
+        );
 
         // Auto scroll to result
         setTimeout(() => {
