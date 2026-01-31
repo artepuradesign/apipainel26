@@ -18,8 +18,7 @@ import {
   Gift,
   Plus
 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import PageHeaderCard from '@/components/dashboard/PageHeaderCard';
+import DashboardTitleCard from '@/components/dashboard/DashboardTitleCard';
 
 interface FAQ {
   id: string;
@@ -165,7 +164,6 @@ const faqData: FAQ[] = [
 ];
 
 const Suporte = () => {
-  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [openItems, setOpenItems] = useState<string[]>([]);
   const [showAll, setShowAll] = useState(false);
@@ -216,16 +214,17 @@ const Suporte = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <PageHeaderCard 
-        title="Central de Suporte" 
+    <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
+      <DashboardTitleCard
+        title="Central de Suporte"
         subtitle="Encontre respostas para as perguntas mais frequentes e tire todas suas dúvidas"
+        icon={<HelpCircle className="h-4 w-4 sm:h-5 sm:w-5" />}
       />
 
       {/* Card principal com design moderno */}
       <Card className="shadow-lg border-0 bg-gradient-to-br from-background to-muted/20">
-        <CardHeader className="pb-6">
-          <CardTitle className="flex items-center gap-3 text-2xl">
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl">
             <div className="p-2 bg-primary/10 rounded-xl">
               <HelpCircle className="h-6 w-6 text-primary" />
             </div>
@@ -277,7 +276,7 @@ const Suporte = () => {
 
           {/* Lista de FAQs com design profissional */}
           <div className="space-y-4">
-            {displayedFAQs.map((faq, index) => (
+              {displayedFAQs.map((faq, index) => (
               <Collapsible
                 key={faq.id}
                 open={openItems.includes(faq.id)}
@@ -285,19 +284,19 @@ const Suporte = () => {
               >
                 <CollapsibleTrigger className="w-full group">
                   <div className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 hover:shadow-md group-hover:scale-[1.02] ${getCategoryStyle(faq.category)}`}>
-                    <div className="flex items-center justify-between p-6">
+                      <div className="flex items-center justify-between p-4 sm:p-6">
                       <div className="flex-1 text-left">
                         <div className="flex items-start gap-3 mb-2">
                           <div className={`p-2 rounded-lg ${faq.category === 'Consultas' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : 'bg-white/50 text-foreground dark:bg-gray-800/50'}`}>
                             {getCategoryIcon(faq.category)}
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-semibold text-lg leading-tight group-hover:text-primary transition-colors">
+                              <h4 className="font-semibold text-base sm:text-lg leading-tight group-hover:text-primary transition-colors">
                               {faq.question}
                             </h4>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3 ml-11">
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-3 ml-11">
                           <Badge variant="secondary" className="text-xs font-medium">
                             {faq.category}
                           </Badge>
@@ -321,8 +320,8 @@ const Suporte = () => {
                   </div>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <div className="px-6 pb-6 -mt-2">
-                    <div className="bg-white/70 dark:bg-gray-800/70 rounded-lg p-4 ml-11 border-l-4 border-primary/30">
+                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 -mt-2">
+                      <div className="bg-white/70 dark:bg-gray-800/70 rounded-lg p-4 ml-11 border-l-4 border-primary/30">
                       <p className="text-muted-foreground leading-relaxed">
                         {faq.answer}
                       </p>
