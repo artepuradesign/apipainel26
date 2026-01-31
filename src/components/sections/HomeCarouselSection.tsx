@@ -235,28 +235,34 @@ const HomeCarouselSection: React.FC = () => {
         </Carousel>
       </div>
 
-      {/* Barra de benefícios (como no exemplo abaixo do banner) */}
+      {/* Barra de benefícios (otimizada para mobile) */}
       <div className="border-y border-border/60 bg-card/60 backdrop-blur-md">
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 py-3 sm:py-4">
-            {benefits.map((b, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-start gap-3 rounded-md px-2 sm:px-2"
-              >
-                <div className="h-9 w-9 sm:h-8 sm:w-8 rounded-full bg-primary/10 ring-1 ring-primary/15 flex items-center justify-center flex-shrink-0">
-                  {b.icon}
+          {/*
+            Mobile: cards em scroll horizontal (melhor leitura e toque)
+            Desktop: grid 3 colunas
+          */}
+          <div className="-mx-4 px-4 sm:mx-0 sm:px-0 py-3 sm:py-4">
+            <div className="flex gap-3 overflow-x-auto pr-2 snap-x snap-mandatory sm:grid sm:overflow-visible sm:pr-0 sm:grid-cols-3 sm:gap-3">
+              {benefits.map((b, idx) => (
+                <div
+                  key={idx}
+                  className="snap-start min-w-[260px] sm:min-w-0 flex items-center gap-3 rounded-xl border border-border bg-background/80 px-3 py-3 sm:bg-transparent sm:border-transparent sm:px-2 sm:py-0"
+                >
+                  <div className="h-9 w-9 sm:h-8 sm:w-8 rounded-full bg-primary/10 ring-1 ring-primary/15 flex items-center justify-center flex-shrink-0">
+                    {b.icon}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-semibold text-foreground leading-none">
+                      {b.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1 leading-none">
+                      {b.description}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <p className="text-sm font-semibold text-foreground leading-none">
-                    {b.title}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1 leading-none">
-                    {b.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
