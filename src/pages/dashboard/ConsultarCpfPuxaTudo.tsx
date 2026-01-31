@@ -1902,8 +1902,13 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
         if (!shouldSuppressInitialFoundToast) {
           if (isConditionalChargeMode) {
             // Importante: não afirmar cobrança aqui (vai depender da seção principal)
-            toast.success('CPF encontrado! Carregando resultados...', {
-              description: `Dados de ${cpfData.nome} carregados com sucesso`,
+            toast.success('CPF encontrado', {
+              description: (
+                <div className="flex flex-col gap-0.5">
+                  <span>Carregando resultados...</span>
+                  <span className="text-muted-foreground">{`Dados de ${cpfData.nome} carregados com sucesso`}</span>
+                </div>
+              ),
               duration: 3000,
               icon: '🔎',
             });
