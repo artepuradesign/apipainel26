@@ -809,7 +809,14 @@ const ConsultarCpfCompleto: React.FC<ConsultarCpfCompletoProps> = ({ moduleId: m
           detail: { shouldAnimate: true, immediate: true }
         }));
 
-        toast.success(`✅ Foto(s) encontrada(s)! Valor cobrado: R$ ${finalPrice.toFixed(2)}`);
+        toast.success(
+          <div className="flex flex-col gap-0.5">
+            <div>✅ Foto(s) encontrada(s)!</div>
+            <div className="text-sm text-muted-foreground">
+              Valor cobrado: R$ {finalPrice.toFixed(2)}
+            </div>
+          </div>
+        );
       } finally {
         setCpfFotoChargePending(null);
         setCpfFotoCharging(false);
