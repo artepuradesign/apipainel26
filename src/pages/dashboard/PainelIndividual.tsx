@@ -169,27 +169,22 @@ const PainelIndividual = () => {
       {panelModules.length > 0 ? (
         <div className="bg-white/75 dark:bg-gray-800/75 rounded-lg border border-gray-200/75 dark:border-gray-700/75 backdrop-blur-sm">
           <CardHeader className="pb-4">
-            <div className={`${isMobile ? 'flex flex-col gap-3' : 'flex items-center justify-between'}`}>
+            <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
-                <div className={`flex items-center ${isMobile ? 'flex-wrap gap-2 mb-2' : 'gap-3 mb-2'}`}>
+                <div className="flex items-center gap-3 mb-2 flex-wrap">
                   <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                    <PanelIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <PanelIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                   </div>
                   <CardTitle className={isMobile ? 'text-base' : ''}>{panel.name}</CardTitle>
                   <div className="flex items-center justify-center w-8 h-8 bg-green-500 text-white rounded-full text-sm font-bold">
                     {panelModules.length}
                   </div>
-                  <Badge variant="outline" className="text-xs font-mono bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
-                    {template}
-                  </Badge>
                 </div>
-                <p className={`text-gray-600 dark:text-gray-400 ${isMobile ? 'text-xs mb-3' : 'text-sm'}`}>
-                  {panel.description} - {panelModules.length} módulos disponíveis
-                </p>
               </div>
             </div>
           </CardHeader>
-          <ModuleGridWrapper className={isMobile ? 'py-1 px-2' : 'p-6 pt-0'}>
+
+          <ModuleGridWrapper className={isMobile ? 'py-1 px-2 pb-3' : 'p-6 pt-0 pb-4'}>
             {panelModules.map((module) => {
               // Calcular preços - apenas com desconto se houver plano ativo da API
               const originalPrice = parseFloat(module.price?.toString().replace(',', '.') || '0');
@@ -211,28 +206,26 @@ const PainelIndividual = () => {
               
               return (
                 <div key={module.id} className={`relative cursor-pointer group ${isMobile ? 'mb-0' : ''}`} onClick={() => handleModuleClick(module)}>
-                  <div className={isMobile ? 'origin-center -my-5' : ''} style={isMobile ? { transform: 'scale(0.79)' } : {}}>
-                    <ModuleCardTemplates
-                      module={{
-                        title: module.title,
-                        description: module.description,
-                        price: formatPrice(finalPrice),
-                        originalPrice: shouldShowDiscount ? formatPrice(originalPrice) : undefined,
-                        discountPercentage: shouldShowDiscount ? discountPercentage : undefined,
-                        status: module.is_active ? 'ativo' : 'inativo',
-                        operationalStatus: module.operational_status === 'maintenance' ? 'manutencao' : module.operational_status,
-                        iconSize: 'medium',
-                        showDescription: true,
-                        icon: module.icon,
-                        color: module.color
-                      }}
-                      template={template}
-                    />
-                  </div>
+                  <ModuleCardTemplates
+                    module={{
+                      title: module.title,
+                      description: module.description,
+                      price: formatPrice(finalPrice),
+                      originalPrice: shouldShowDiscount ? formatPrice(originalPrice) : undefined,
+                      discountPercentage: shouldShowDiscount ? discountPercentage : undefined,
+                      status: module.is_active ? 'ativo' : 'inativo',
+                      operationalStatus: module.operational_status === 'maintenance' ? 'manutencao' : module.operational_status,
+                      iconSize: 'medium',
+                      showDescription: true,
+                      icon: module.icon,
+                      color: module.color
+                    }}
+                    template={template}
+                  />
                   
                   {/* Overlay para saldo insuficiente - aparece sobre o card */}
                   {!hasSufficientBalance && (
-                    <div className={`absolute inset-0 bg-black/60 dark:bg-black/70 rounded-lg z-50 flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isMobile ? 'origin-center -my-5' : ''}`} style={isMobile ? { transform: 'scale(0.79)' } : {}}>
+                    <div className="absolute inset-0 bg-black/60 dark:bg-black/70 rounded-lg z-50 flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="text-center text-white bg-black/80 backdrop-blur-sm rounded-lg px-4 py-3 border border-white/20 shadow-2xl w-[85%] max-w-[170px]">
                         <Lock className="h-6 w-6 mx-auto mb-2 text-white" />
                         <p className="text-sm font-medium">Saldo Insuficiente</p>
