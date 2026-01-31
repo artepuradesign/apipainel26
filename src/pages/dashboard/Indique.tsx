@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Users, RefreshCw, Trash2, Wallet, Wifi, WifiOff } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import ReferralCode from '@/components/minha-conta/ReferralCode';
+import DashboardTitleCard from '@/components/dashboard/DashboardTitleCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { walletApiService } from '@/services/walletApiService';
 import { systemConfigService } from '@/services/systemConfigService';
@@ -237,7 +238,12 @@ const Indique = () => {
 
   if (isLoading && !referralCode) {
     return (
-      <div className="space-y-6 relative z-10">
+      <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
+        <DashboardTitleCard
+          title="Programa de Indicação"
+          subtitle="Convide amigos e ganhe bônus na sua carteira"
+          icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
+        />
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -262,7 +268,12 @@ const Indique = () => {
 
   if (!referralCode) {
     return (
-      <div className="space-y-6 relative z-10">
+      <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
+        <DashboardTitleCard
+          title="Programa de Indicação"
+          subtitle="Convide amigos e ganhe bônus na sua carteira"
+          icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
+        />
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -292,13 +303,18 @@ const Indique = () => {
   }
 
   return (
-    <div className="space-y-6 relative z-10">
+    <div className="space-y-4 sm:space-y-6 relative z-10 px-1 sm:px-0">
+      <DashboardTitleCard
+        title="Programa de Indicação"
+        subtitle="Convide amigos e ganhe bônus na sua carteira"
+        icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
+      />
       {/* Layout responsivo: 2 colunas no desktop, 1 coluna no mobile */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Coluna 1: Meu Código de Indicação */}
         <Card className="bg-white/90 dark:bg-gray-800/90 border border-gray-200/50 dark:border-gray-700/50 shadow-sm backdrop-blur-sm">
-          <CardHeader className="px-4 md:px-6">
+          <CardHeader className="px-4 sm:px-6">
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <Users className="h-4 w-4 md:h-5 md:w-5 text-green-500" />
               Meu Código de Indicação
@@ -307,7 +323,7 @@ const Indique = () => {
               Compartilhe seu código e ganhe bônus quando alguém se cadastrar
             </p>
           </CardHeader>
-          <CardContent className="p-4 md:p-6">
+          <CardContent className="p-4 sm:p-6">
             <ReferralCode 
               codigoIndicacao={referralCode}
             />
@@ -316,13 +332,13 @@ const Indique = () => {
 
         {/* Coluna 2: Estatísticas Resumidas */}
         <Card className="bg-white/90 dark:bg-gray-800/90 border border-gray-200/50 dark:border-gray-700/50 shadow-sm backdrop-blur-sm">
-          <CardHeader className="px-4 md:px-6">
+          <CardHeader className="px-4 sm:px-6">
             <CardTitle className="text-base md:text-lg">Resumo de Indicações</CardTitle>
             <p className="text-xs md:text-sm text-muted-foreground">
               Veja suas estatísticas de indicação
             </p>
           </CardHeader>
-          <CardContent className="p-4 md:p-6">
+          <CardContent className="p-4 sm:p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
                 <div className="text-center">
@@ -363,7 +379,7 @@ const Indique = () => {
 
       {/* Bônus por Indicação - Largura Total */}
       <Card className="bg-white/90 dark:bg-gray-800/90 border border-gray-200/50 dark:border-gray-700/50 shadow-sm backdrop-blur-sm">
-        <CardHeader className="px-4 md:px-6">
+        <CardHeader className="px-4 sm:px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <CardTitle className="text-base md:text-lg">Histórico de Bônus por Indicação</CardTitle>
@@ -385,7 +401,7 @@ const Indique = () => {
             )}
           </div>
         </CardHeader>
-        <CardContent className="px-4 md:px-6">
+        <CardContent className="px-4 sm:px-6">
           {referralEarnings.length > 0 ? (
             <div className="space-y-3">
               {referralEarnings.map((earning) => {

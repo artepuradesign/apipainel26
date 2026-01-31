@@ -8,6 +8,8 @@ import BasicInfoForm from '@/components/minha-conta/BasicInfoForm';
 import PasswordChangeForm from '@/components/minha-conta/PasswordChangeForm';
 import PageHeaderCard from '@/components/dashboard/PageHeaderCard';
 import { useLocation } from 'react-router-dom';
+import DashboardTitleCard from '@/components/dashboard/DashboardTitleCard';
+import { User } from 'lucide-react';
 
 
 const MinhaConta = () => {
@@ -48,10 +50,15 @@ const MinhaConta = () => {
 
   return (
     <div className="space-y-4 sm:space-y-6 px-1 sm:px-0">
-      <PageHeaderCard 
-        title={pageTitle}
-        subtitle={pageSubtitle}
-      />
+      {isNewRoute ? (
+        <DashboardTitleCard
+          title={pageTitle}
+          subtitle={pageSubtitle}
+          icon={<User className="h-4 w-4 sm:h-5 sm:w-5" />}
+        />
+      ) : (
+        <PageHeaderCard title={pageTitle} subtitle={pageSubtitle} />
+      )}
 
       <AccountInfo userData={userData} />
 
