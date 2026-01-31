@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, Plus, ArrowUpDown, ArrowDownUp, RefreshCw } from 'lucide-react';
+import { Wallet, Plus, ArrowUpDown, ArrowDownUp, RefreshCw, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { walletApiService } from '@/services/walletApiService';
@@ -12,9 +12,11 @@ import WalletInfoCard from '@/components/carteira/WalletInfoCard';
 import TransactionHistory from '@/components/carteira/TransactionHistory';
 import TransferCard from '@/components/carteira/TransferCard';
 import GiftCard from '@/components/carteira/GiftCard';
+import { useNavigate } from 'react-router-dom';
 
 const Carteira = () => {
   const { user, isSupport } = useAuth();
+  const navigate = useNavigate();
   const [balance, setBalance] = useState({ saldo: 0, saldo_plano: 0, total: 0 });
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -180,6 +182,16 @@ const Carteira = () => {
               </p>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => navigate('/dashboard')}
+                className="rounded-full h-9 w-9"
+                aria-label="Voltar"
+                title="Voltar"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
               <Badge variant="secondary" className={`text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 ${error ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" : "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"}`}>
                 {error ? 'Erro' : 'Ativa'}
               </Badge>
