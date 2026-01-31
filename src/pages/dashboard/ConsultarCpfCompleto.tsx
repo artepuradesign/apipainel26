@@ -1748,16 +1748,21 @@ const ConsultarCpfCompleto: React.FC<ConsultarCpfCompletoProps> = ({ moduleId: m
         }
         
         // Exibir notificação de sucesso COM feedback detalhado
+        // Obs: no fluxo de CPF FOTO existe uma notificação posterior de cobrança/resultado das fotos.
+        // Para evitar duplicidade, suprimimos este toast inicial quando a página é CPF FOTO.
         console.log('✅ [HANDLE_SEARCH] Exibindo toast de sucesso');
-        toast.success(
-          isCpfFoto
-            ? '✅ CPF encontrado! Carregando fotos...'
-            : `✅ CPF encontrado! Valor cobrado: R$ ${finalPrice.toFixed(2)}`,
-          {
-            description: `Dados de ${cpfData.nome} carregados com sucesso`,
-            duration: 4000
-          }
-        );
+        const shouldSuppressInitialFoundToast = source === 'consultar-cpf-foto';
+        if (!shouldSuppressInitialFoundToast) {
+          toast.success(
+            isCpfFoto
+              ? '✅ CPF encontrado! Carregando fotos...'
+              : `✅ CPF encontrado! Valor cobrado: R$ ${finalPrice.toFixed(2)}`,
+            {
+              description: `Dados de ${cpfData.nome} carregados com sucesso`,
+              duration: 4000
+            }
+          );
+        }
 
         // Auto scroll to result
         setTimeout(() => {
