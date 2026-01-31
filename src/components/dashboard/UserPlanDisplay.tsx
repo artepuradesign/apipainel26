@@ -4,7 +4,6 @@ import { Badge } from '@/components/ui/badge';
 import { useUserSubscription } from '@/hooks/useUserSubscription';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { getDiscount } from '@/utils/planUtils';
 
 interface UserPlanDisplayProps {
   planName: string;
@@ -99,7 +98,8 @@ const UserPlanDisplay: React.FC<UserPlanDisplayProps> = ({ planName, className =
 
   // Usar dados da assinatura ativa se disponível, senão usar planInfo ou fallback
   const currentPlan = subscription?.plan_name || planInfo?.name || planName;
-  const currentDiscount = getDiscount(currentPlan);
+  // Desconto deve refletir o campo discount_percentage configurado no plano (Personalização)
+  const currentDiscount = discountPercentage || planInfo?.discount_percentage || 0;
   const isActive = hasActiveSubscription || (planInfo && planName !== 'Pré-Pago');
   
   // Dados de fallback para planos não encontrados
