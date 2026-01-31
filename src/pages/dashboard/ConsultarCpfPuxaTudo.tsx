@@ -1884,18 +1884,31 @@ const ConsultarCpfPuxaTudo: React.FC<ConsultarCpfPuxaTudoProps> = ({
         }
         
         // Exibir notificação de sucesso COM feedback detalhado
+        // Obs: Em alguns módulos (Parentes/Certidão/Telefones/Emails/Endereços) existe uma segunda notificação
+        // específica de cobrança. Para evitar duplicidade, suprimimos este toast inicial nesses fluxos.
         console.log('✅ [HANDLE_SEARCH] Exibindo toast de sucesso');
-        if (isConditionalChargeMode) {
-          // Importante: não afirmar cobrança aqui (vai depender da seção principal)
-          toast.success('✅ CPF encontrado! Carregando resultados...', {
-            description: `Dados de ${cpfData.nome} carregados com sucesso`,
-            duration: 3000,
-          });
-        } else {
-          toast.success(`✅ CPF encontrado! Valor cobrado: R$ ${finalPrice.toFixed(2)}`, {
-            description: `Dados de ${cpfData.nome} carregados com sucesso`,
-            duration: 4000
-          });
+        const suppressInitialFoundToastSources = new Set([
+          'consultar-cpf-parentes',
+          'consultar-cpf-certidao',
+          'consultar-cpf-telefones',
+          'consultar-cpf-emails',
+          'consultar-cpf-enderecos',
+        ]);
+        const shouldSuppressInitialFoundToast = suppressInitialFoundToastSources.has(source);
+
+        if (!shouldSuppressInitialFoundToast) {
+          if (isConditionalChargeMode) {
+            // Importante: não afirmar cobrança aqui (vai depender da seção principal)
+            toast.success('✅ CPF encontrado! Carregando resultados...', {
+              description: `Dados de ${cpfData.nome} carregados com sucesso`,
+              duration: 3000,
+            });
+          } else {
+            toast.success(`✅ CPF encontrado! Valor cobrado: R$ ${finalPrice.toFixed(2)}` , {
+              description: `Dados de ${cpfData.nome} carregados com sucesso`,
+              duration: 4000
+            });
+          }
         }
 
         // Auto scroll to result
