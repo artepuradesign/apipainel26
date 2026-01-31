@@ -1,5 +1,6 @@
 import React from 'react';
 import { Wallet, RefreshCw } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface EmptyStateProps {
   title: string;
@@ -8,23 +9,27 @@ interface EmptyStateProps {
 }
 
 const EmptyState: React.FC<EmptyStateProps> = ({ title, subtitle, loading = false }) => (
-  <div className="text-center py-12">
-    {loading ? (
-      <div className="flex items-center justify-center">
-        <RefreshCw className="w-6 h-6 animate-spin text-gray-400 mr-2" />
-        <p className="text-gray-500">Carregando dados via API...</p>
-      </div>
-    ) : (
-      <>
-        <Wallet className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-        <p className="text-lg font-medium text-gray-500 dark:text-gray-400 mb-2">
-          {title}
-        </p>
-        <p className="text-sm text-gray-400">
-          {subtitle}
-        </p>
-      </>
-    )}
+  <div className="py-10">
+    <div className="mx-auto max-w-md">
+      <Card className="border-border bg-card">
+        <CardContent className="p-6 text-center">
+          {loading ? (
+            <div className="flex items-center justify-center gap-2 text-muted-foreground">
+              <RefreshCw className="h-5 w-5 animate-spin" />
+              <p className="text-sm">Carregando dados…</p>
+            </div>
+          ) : (
+            <>
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-border bg-muted">
+                <Wallet className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <p className="text-base font-semibold text-foreground">{title}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   </div>
 );
 
