@@ -4,7 +4,6 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FileText } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
 
 interface HistoryItem {
@@ -33,7 +32,6 @@ const ConsultationsSection: React.FC<ConsultationsSectionProps> = ({
   formatDate,
   loading = false
 }) => {
-  const isMobile = useIsMobile();
   const navigate = useNavigate();
 
   const consultationItems = allHistory.filter(item =>
@@ -109,7 +107,7 @@ const ConsultationsSection: React.FC<ConsultationsSectionProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Desktop Table View */}
       <div className="hidden md:block overflow-x-auto">
         <Table>
@@ -164,7 +162,8 @@ const ConsultationsSection: React.FC<ConsultationsSectionProps> = ({
       </div>
 
       {/* Mobile Card View */}
-      <div className="block md:hidden space-y-3">
+      <div className="block md:hidden">
+        <div className="rounded-lg border bg-card divide-y">
         {consultationItems.map((consultation) => {
           const consultationValue = consultation.cost || consultation.amount || 0;
           const valueString = String(consultationValue);
@@ -172,56 +171,46 @@ const ConsultationsSection: React.FC<ConsultationsSectionProps> = ({
             ? parseFloat(valueString.replace(',', '.')) 
             : Math.abs(Number(consultationValue)) || 0;
 
+          const statusIsDone = consultation.status === 'success' || consultation.status === 'completed';
+
           return (
-            <Card 
-              key={consultation.id} 
-              className="border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow"
+            <button
+              key={consultation.id}
+              type="button"
               onClick={() => handleConsultationClick(consultation)}
+              className="w-full text-left px-3 py-2.5 active:bg-muted/60"
             >
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400">ID:</span>
-                      <span className="text-xs font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                        {consultation.id.toString().slice(0, 8)}...
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400">CPF:</span>
-                      <span className="text-sm font-mono font-semibold text-gray-900 dark:text-gray-100">
-                        {formatCPF(consultation.document || '')}
-                      </span>
-                    </div>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-sm font-semibold truncate">
+                      {formatCPF(consultation.document || '')}
+                    </span>
+                    <span className="font-mono text-[11px] text-muted-foreground">
+                      {consultation.id.toString().slice(0, 8)}…
+                    </span>
                   </div>
-                  <Badge 
-                    variant={consultation.status === 'success' || consultation.status === 'completed' ? 'default' : 'secondary'}
-                    className="text-xs"
+                  <div className="mt-0.5 text-[11px] text-muted-foreground">
+                    {formatFullDate(consultation.created_at)}
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                  <div className="text-sm font-semibold text-destructive">
+                    -{formatBrazilianCurrency(numericValue)}
+                  </div>
+                  <Badge
+                    variant={statusIsDone ? 'default' : 'secondary'}
+                    className="text-[10px] h-5 px-2"
                   >
-                    {consultation.status === 'success' || consultation.status === 'completed' ? 'Concluída' : 'Pendente'}
+                    {statusIsDone ? 'Concluída' : 'Pendente'}
                   </Badge>
                 </div>
-                
-                <div className="border-t border-gray-100 dark:border-gray-700 pt-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Data/Hora:</span>
-                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
-                        {formatFullDate(consultation.created_at)}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Valor:</span>
-                      <p className="text-sm font-bold text-red-600 dark:text-red-400 mt-1">
-                        R$ {numericValue.toFixed(2).replace('.', ',')}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
+            </button>
           );
         })}
+        </div>
       </div>
     </div>
   );
