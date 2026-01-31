@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FileText } from 'lucide-react';
 import { toast } from 'sonner';
@@ -74,9 +73,9 @@ const ConsultationsSection: React.FC<ConsultationsSectionProps> = ({
 
   if (consultationItems.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-        <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+      <div className="text-center py-8 text-muted-foreground">
+        <FileText className="h-12 w-12 text-muted-foreground/60 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-foreground mb-2">
           Nenhuma consulta encontrada
         </h3>
         <p className="text-sm">
@@ -163,7 +162,7 @@ const ConsultationsSection: React.FC<ConsultationsSectionProps> = ({
 
       {/* Mobile Card View */}
       <div className="block md:hidden">
-        <div className="rounded-lg border bg-card divide-y">
+        <div className="rounded-lg border border-border bg-card divide-y divide-border">
         {consultationItems.map((consultation) => {
           const consultationValue = consultation.cost || consultation.amount || 0;
           const valueString = String(consultationValue);
@@ -172,39 +171,59 @@ const ConsultationsSection: React.FC<ConsultationsSectionProps> = ({
             : Math.abs(Number(consultationValue)) || 0;
 
           const statusIsDone = consultation.status === 'success' || consultation.status === 'completed';
+          const moduleLabel = (consultation.module_type || '').toString().trim().toUpperCase();
 
           return (
             <button
               key={consultation.id}
               type="button"
               onClick={() => handleConsultationClick(consultation)}
-              className="w-full text-left px-3 py-2.5 active:bg-muted/60"
+              className="w-full text-left px-3 py-2.5 hover:bg-muted/50 active:bg-muted transition-colors"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-sm font-semibold truncate">
-                      {formatCPF(consultation.document || '')}
-                    </span>
-                    <span className="font-mono text-[11px] text-muted-foreground">
-                      {consultation.id.toString().slice(0, 8)}…
-                    </span>
-                  </div>
-                  <div className="mt-0.5 text-[11px] text-muted-foreground">
-                    {formatFullDate(consultation.created_at)}
-                  </div>
-                </div>
+              <div className="flex items-center gap-2.5">
+                {/* Status indicator */}
+                <span
+                  className={`flex-shrink-0 h-2 w-2 rounded-full ${statusIsDone ? 'bg-primary' : 'bg-muted-foreground'}`}
+                  aria-label={statusIsDone ? 'Concluída' : 'Pendente'}
+                />
 
-                <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <div className="text-sm font-semibold text-destructive">
-                    -{formatBrazilianCurrency(numericValue)}
+                {/* Main content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-medium truncate">
+                          {formatCPF(consultation.document || '')}
+                        </span>
+                        {moduleLabel ? (
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] px-1.5 py-0 h-4 flex-shrink-0"
+                          >
+                            {moduleLabel}
+                          </Badge>
+                        ) : null}
+                      </div>
+                      <div className="mt-0.5 text-[10px] text-muted-foreground">
+                        {formatFullDate(consultation.created_at)}
+                      </div>
+                    </div>
+
+                    {/* Right side */}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="text-right">
+                        <div className="text-xs font-medium text-destructive">
+                          {formatBrazilianCurrency(numericValue)}
+                        </div>
+                      </div>
+                      <Badge
+                        variant={statusIsDone ? 'default' : 'secondary'}
+                        className="text-[10px] h-5 px-2"
+                      >
+                        {statusIsDone ? 'OK' : '...'}
+                      </Badge>
+                    </div>
                   </div>
-                  <Badge
-                    variant={statusIsDone ? 'default' : 'secondary'}
-                    className="text-[10px] h-5 px-2"
-                  >
-                    {statusIsDone ? 'Concluída' : 'Pendente'}
-                  </Badge>
                 </div>
               </div>
             </button>
